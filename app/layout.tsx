@@ -4,6 +4,7 @@ import './globals.css'
 import { LocalBusinessSchema } from '@/components/seo-schema'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { GoogleAnalytics } from '@/components/google-analytics'
 
 const unbounded = Unbounded({
   subsets: ['latin'],
@@ -103,6 +104,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${unbounded.variable} ${acme.variable}`}>
       <body>
+        <GoogleAnalytics />
         <LocalBusinessSchema />
         <Header />
         {children}
