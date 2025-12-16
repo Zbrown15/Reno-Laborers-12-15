@@ -10,6 +10,10 @@ module.exports = {
       maxWidth: {
         container: "1280px",
       },
+      fontFamily: {
+        unbounded: ['var(--font-unbounded)', 'sans-serif'],
+        acme: ['var(--font-acme)', 'sans-serif'],
+      },
       animation: {
         marquee: 'marquee var(--duration) linear infinite',
       },

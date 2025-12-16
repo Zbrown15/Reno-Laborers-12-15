@@ -1,6 +1,20 @@
 import type { Metadata } from 'next'
+import { Unbounded, Acme } from 'next/font/google'
 import './globals.css'
 import { LocalBusinessSchema } from '@/components/seo-schema'
+
+const unbounded = Unbounded({
+  subsets: ['latin'],
+  variable: '--font-unbounded',
+  display: 'swap',
+})
+
+const acme = Acme({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-acme',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Professional Lawn Care Services in Reno & Sparks, Nevada | Reno Laborers',
@@ -80,7 +94,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${unbounded.variable} ${acme.variable}`}>
       <body>
         <LocalBusinessSchema />
         {children}
