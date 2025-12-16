@@ -6,3 +6,5 @@
 
 [build.environment]
   NODE_VERSION = "22.21.1"
+  
+# Note: Do not set publish directory - @netlify/plugin-nextjs handles it automatically
