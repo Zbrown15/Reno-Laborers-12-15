@@ -5,9 +5,10 @@ export function middleware(request: NextRequest) {
   const response = NextResponse.next()
   
   // Get the client IP address
-  const ip = request.ip || 
+  const ip = 
     request.headers.get('x-forwarded-for')?.split(',')[0] || 
     request.headers.get('x-real-ip') || 
+    request.headers.get('cf-connecting-ip') ||
     'unknown'
 
   // Check if IP matches excluded IPs
