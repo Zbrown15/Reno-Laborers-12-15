@@ -132,13 +132,31 @@ export function Testimonials() {
           <div className="relative flex w-full flex-col items-center justify-center overflow-hidden min-h-[400px]">
             <div className="group flex overflow-hidden p-2 [--gap:1rem] [gap:var(--gap)] flex-row [--duration:500s] w-full">
               <div className="flex shrink-0 [gap:var(--gap)] animate-marquee flex-row group-hover:[animation-play-state:paused]">
-                {[...Array(8)].map((_, setIndex) => (
-                  testimonials.map((testimonial, i) => (
-                    <TestimonialCard 
-                      key={`${setIndex}-${i}`}
-                      {...testimonial}
-                    />
-                  ))
+                {testimonials.map((testimonial, i) => (
+                  <TestimonialCard 
+                    key={`first-${i}`}
+                    {...testimonial}
+                  />
+                ))}
+                {testimonials.map((testimonial, i) => (
+                  <TestimonialCard 
+                    key={`second-${i}`}
+                    {...testimonial}
+                  />
+                ))}
+              </div>
+              <div className="flex shrink-0 [gap:var(--gap)] animate-marquee flex-row group-hover:[animation-play-state:paused]" aria-hidden="true">
+                {testimonials.map((testimonial, i) => (
+                  <TestimonialCard 
+                    key={`duplicate-first-${i}`}
+                    {...testimonial}
+                  />
+                ))}
+                {testimonials.map((testimonial, i) => (
+                  <TestimonialCard 
+                    key={`duplicate-second-${i}`}
+                    {...testimonial}
+                  />
                 ))}
               </div>
             </div>

@@ -1,13 +1,18 @@
 "use client";
 
 import Image from "next/image";
+import { ServiceData } from "@/lib/services-data";
 
-export function CTA() {
+interface ServiceCTAProps {
+  service: ServiceData;
+}
+
+export function ServiceCTA({ service }: ServiceCTAProps) {
   return (
     <section className="relative min-h-[500px] w-full overflow-hidden">
       <Image
         src="/lawnHouseIMG.jpg"
-        alt="Professional lawn care services"
+        alt="Ready to get started with lawn care services"
         fill
         className="object-cover"
       />
@@ -16,10 +21,10 @@ export function CTA() {
         <div className="mx-auto max-w-container px-4">
           <div className="flex flex-col items-center gap-8 text-center">
             <h2 className="text-3xl font-bold leading-tight sm:text-5xl sm:leading-tight text-white drop-shadow-lg">
-              Get Your Free Quote
+              Ready to Get {service.name}?
             </h2>
             <p className="text-xl md:text-2xl text-white font-semibold max-w-[700px] drop-shadow-md leading-relaxed">
-              Ready to transform your lawn? Get a free, no-obligation quote for professional lawn care services in Reno and Sparks. I provide customized lawn mowing, weed control, edging, and seasonal maintenance solutions tailored to your property's needs.
+              Contact me today for a free, no-obligation quote on professional {service.name.toLowerCase()} services in Reno and Sparks. I'll provide customized solutions tailored to your property's specific needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-4">
               <a

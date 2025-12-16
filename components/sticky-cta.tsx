@@ -11,7 +11,7 @@ export function StickyCTA() {
       </p>
       <div className="flex flex-col gap-4">
         <a
-          href="#contact"
+          href="/contact"
           className="px-6 py-3 bg-[#1e3a5f] text-white font-semibold rounded-full text-lg hover:bg-[#2a4a6f] transition-colors shadow-lg"
         >
           Get a Free Quote

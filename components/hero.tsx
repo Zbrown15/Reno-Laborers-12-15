@@ -17,14 +17,14 @@ export function Hero() {
       <div className="relative z-10 flex min-h-screen w-full items-center justify-start">
         <div className="flex flex-col items-start justify-center gap-6 px-8 md:px-16 lg:px-24 text-left max-w-4xl">
           <motion.h1
-            className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white tracking-tight leading-tight"
+            className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white tracking-tight leading-tight font-unbounded"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 2.5, ease: "easeOut" }}
           >
             <span className="whitespace-nowrap">Professional Lawn Care Services</span>
             <br />
-            in Reno & Sparks, NV
+            <span className="whitespace-nowrap">in Reno & Sparks, NV</span>
           </motion.h1>
           <motion.p
             className="text-lg md:text-xl lg:text-2xl text-white/90 font-medium"
@@ -41,7 +41,7 @@ export function Hero() {
                    transition={{ duration: 2.5, delay: 1, ease: "easeOut" }}
                  >
                    <motion.a
-                     href="#contact"
+                     href="/contact"
                      className="px-8 py-4 bg-[#1e3a5f] text-white font-semibold rounded-full text-lg hover:bg-[#2a4a6f] transition-colors shadow-lg"
                      whileHover={{ scale: 1.05 }}
                      whileTap={{ scale: 0.95 }}

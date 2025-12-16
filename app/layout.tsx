@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Unbounded, Acme } from 'next/font/google'
 import './globals.css'
 import { LocalBusinessSchema } from '@/components/seo-schema'
+import { Header } from '@/components/header'
+import { Footer } from '@/components/footer'
 
 const unbounded = Unbounded({
   subsets: ['latin'],
@@ -19,6 +21,11 @@ const acme = Acme({
 export const metadata: Metadata = {
   title: 'Professional Lawn Care Services in Reno & Sparks, Nevada | Reno Laborers',
   description: 'Expert lawn mowing, edging, weed control, leaf raking, snow shoveling, and landscaping services in Reno, Sparks, Spanish Springs, and Incline Village. Residential and commercial lawn care you can trust.',
+  icons: {
+    icon: '/RLLogo.png',
+    shortcut: '/RLLogo.png',
+    apple: '/RLLogo.png',
+  },
   keywords: [
     'lawn care reno',
     'lawn mowing reno',
@@ -97,7 +104,9 @@ export default function RootLayout({
     <html lang="en" className={`${unbounded.variable} ${acme.variable}`}>
       <body>
         <LocalBusinessSchema />
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   )

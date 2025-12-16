@@ -1,13 +1,18 @@
 "use client";
 
 import Image from "next/image";
+import { ServiceAreaData } from "@/lib/service-areas-data";
 
-export function CTA() {
+interface ServiceAreaCTAProps {
+  area: ServiceAreaData;
+}
+
+export function ServiceAreaCTA({ area }: ServiceAreaCTAProps) {
   return (
     <section className="relative min-h-[500px] w-full overflow-hidden">
       <Image
         src="/lawnHouseIMG.jpg"
-        alt="Professional lawn care services"
+        alt={`Ready to get started with lawn care in ${area.name}`}
         fill
         className="object-cover"
       />
@@ -16,14 +21,14 @@ export function CTA() {
         <div className="mx-auto max-w-container px-4">
           <div className="flex flex-col items-center gap-8 text-center">
             <h2 className="text-3xl font-bold leading-tight sm:text-5xl sm:leading-tight text-white drop-shadow-lg">
-              Get Your Free Quote
+              Ready to Get Started in {area.name}?
             </h2>
             <p className="text-xl md:text-2xl text-white font-semibold max-w-[700px] drop-shadow-md leading-relaxed">
-              Ready to transform your lawn? Get a free, no-obligation quote for professional lawn care services in Reno and Sparks. I provide customized lawn mowing, weed control, edging, and seasonal maintenance solutions tailored to your property's needs.
+              Contact me today for a free, no-obligation quote on professional lawn care services in {area.name}. I'll provide customized solutions tailored to your property's specific needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-4">
               <a
-                href="/contact"
+                href="/services"
                 className="px-8 py-4 bg-[#1e3a5f] text-white font-semibold rounded-full text-lg hover:bg-[#2a4a6f] transition-colors shadow-lg"
               >
                 Get a Free Quote

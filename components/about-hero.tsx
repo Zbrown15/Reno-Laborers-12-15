@@ -39,7 +39,7 @@ export function AboutHero() {
             transition={{ duration: 2.5, delay: 1, ease: "easeOut" }}
           >
             <motion.a
-              href="#contact"
+              href="/contact"
               className="px-8 py-4 bg-[#1e3a5f] text-white font-semibold rounded-full text-lg hover:bg-[#2a4a6f] transition-colors shadow-lg"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

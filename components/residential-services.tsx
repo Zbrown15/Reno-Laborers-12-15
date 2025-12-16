@@ -26,7 +26,7 @@ export function ResidentialServices() {
               Many homeowners simply don't have the time or interest to handle their landscaping tasks themselves, which makes Reno Laborers your ideal partner in keeping your lawn looking pristine. My professional residential lawn care services in Reno, Nevada are especially beneficial if you have a large property that would otherwise be far too much for you to manage, even if you had the interest in doing so. As your trusted residential lawn care provider, I offer comprehensive residential lawn maintenance solutions designed to keep your property looking its best year-round.
             </p>
             <a
-              href="#contact"
+              href="/services"
               className="px-8 py-4 bg-[#1e3a5f] text-white font-semibold rounded-full text-lg hover:bg-[#2a4a6f] transition-colors shadow-lg w-fit"
             >
               Get A Free Quote

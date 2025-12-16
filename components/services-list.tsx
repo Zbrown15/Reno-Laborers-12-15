@@ -1,35 +1,41 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Scissors, Sprout, Snowflake, Leaf } from "lucide-react";
 
 const services = [
   {
     name: "Lawn Mowing",
+    slug: "lawn-mowing",
     icon: Scissors,
     description: "Professional lawn mowing services with regular weekly or bi-weekly maintenance. I provide proper grass cutting techniques, even cuts, and clean removal of clippings for a healthy, pristine lawn that enhances your property's curb appeal.",
     image: "/lawnMowedDriveway.jpg"
   },
   {
     name: "Weed Control",
+    slug: "weed-control",
     icon: Sprout,
     description: "Comprehensive weed control and removal services to maintain a beautiful, weed-free lawn. I use proven methods to eliminate existing weeds and prevent future growth, ensuring your lawn and garden beds remain healthy throughout the growing season.",
     image: "/weedFreeGardenBed.jpg"
   },
   {
     name: "Lawn Edging",
+    slug: "lawn-edging",
     icon: Scissors,
     description: "Precise lawn edging services that create clean, defined borders along driveways, walkways, and garden beds. My professional edging techniques give your property a polished appearance with sharp, clean lines that prevent grass from encroaching into unwanted areas.",
     image: "/lawnWithEdgingDone.jpg"
   },
   {
     name: "Leaf Raking",
+    slug: "leaf-raking",
     icon: Leaf,
     description: "Thorough leaf raking and yard cleanup services to keep your property clean and protect your lawn. I remove leaves, pine needles, and seasonal debris from lawns and garden beds, preventing lawn damage and maintaining healthy grass. All debris is bagged and removed for a tidy yard.",
     image: "/rakingJobDone.jpg"
   },
   {
     name: "Snow Shoveling",
+    slug: "snow-shoveling",
     icon: Snowflake,
     description: "Reliable snow shoveling and snow removal services to keep your property safe and accessible during winter. I clear driveways, walkways, and sidewalks using efficient techniques, preventing ice buildup and ensuring safe access to your home.",
     image: "/snowyDriveway.jpg"
@@ -69,12 +75,12 @@ export function ServicesList() {
                 <p className="text-lg text-gray-300 leading-relaxed">
                   {service.description}
                 </p>
-                <a
-                  href="#contact"
+                <Link
+                  href={`/services/${service.slug}`}
                   className="px-6 py-3 bg-[#1e3a5f] text-white font-medium rounded-full hover:bg-[#2a4a6f] transition-colors w-fit"
                 >
                   Learn More
-                </a>
+                </Link>
               </div>
             </div>
           </div>
