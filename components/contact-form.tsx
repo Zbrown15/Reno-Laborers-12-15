@@ -59,32 +59,49 @@ export function ContactForm() {
     setSubmitStatus("idle");
 
     try {
-      // Create FormData for file upload
-      const formDataToSend = new FormData();
-      formDataToSend.append("firstName", formData.firstName);
-      formDataToSend.append("phone", formData.phone);
-      formDataToSend.append("email", formData.email);
-      formDataToSend.append("address", formData.address);
-      formDataToSend.append("zipcode", formData.zipcode);
-      formDataToSend.append("serviceType", formData.serviceType);
-
-      formData.images.forEach((image, index) => {
-        formDataToSend.append(`images`, image);
+      // Convert images to base64 strings for JSON payload
+      const imagePromises = formData.images.map((file) => {
+        return new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64String = reader.result as string;
+            resolve(base64String);
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
       });
 
-      // Here you would typically send to your API endpoint
-      // For now, we'll just simulate a submission
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const base64Images = await Promise.all(imagePromises);
 
-      console.log("Form data:", {
+      // Create JSON payload
+      const payload = {
         firstName: formData.firstName,
         phone: formData.phone,
         email: formData.email,
         address: formData.address,
         zipcode: formData.zipcode,
         serviceType: formData.serviceType,
-        images: formData.images,
-      });
+        images: base64Images,
+        imageCount: formData.images.length,
+        submittedAt: new Date().toISOString(),
+      };
+
+      // Send to webhook
+      const response = await fetch(
+        "https://hook.us2.make.com/jsglnksrvh8fbkvvfjiwcbvp2mi846w0",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Webhook request failed: ${response.status}`);
+      }
 
       setSubmitStatus("success");
       
