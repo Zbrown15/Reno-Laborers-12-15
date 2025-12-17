@@ -60,11 +60,14 @@ export function ContactForm() {
 
     try {
       // Convert images to base64 strings with filename for JSON payload
+      // Extract just the base64 string (without data URL prefix) for Telegram bot compatibility
       const imagePromises = formData.images.map((file) => {
         return new Promise<{ data: string; filename: string }>((resolve, reject) => {
           const reader = new FileReader();
           reader.onloadend = () => {
-            const base64String = reader.result as string;
+            const dataUrl = reader.result as string;
+            // Extract just the base64 string (remove "data:image/type;base64," prefix)
+            const base64String = dataUrl.includes(',') ? dataUrl.split(',')[1] : dataUrl;
             resolve({
               data: base64String,
               filename: file.name,
