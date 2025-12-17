@@ -34,11 +34,20 @@ export const metadata: Metadata = {
     siteName: 'Reno Laborers',
     locale: 'en_US',
     type: 'website',
+    images: [
+      {
+        url: '/RLLogo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Reno Laborers - About Us',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'About Reno Laborers - Professional Lawn Care Services',
     description: 'Learn about Reno Laborers, your trusted one-person lawn care service in Reno and Sparks, Nevada.',
+    images: ['/RLLogo.png'],
   },
   robots: {
     index: true,

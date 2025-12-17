@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+
+Content-signal: search=yes,ai-train=yes
+
+Sitemap: https://renolaborers.com/sitemap.xml
+

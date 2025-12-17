@@ -40,7 +40,7 @@ export function OtherServices({ currentServiceSlug }: OtherServicesProps) {
                   {service.quickDescription}
                 </p>
                 <span className="text-[#87A96B] text-sm font-medium mt-2 inline-block group-hover:underline">
-                  Learn More →
+                  Learn More about {service.name} →
                 </span>
               </div>
             </Link>
@@ -50,4 +50,6 @@ export function OtherServices({ currentServiceSlug }: OtherServicesProps) {
     </section>
   );
 }
+
+
 

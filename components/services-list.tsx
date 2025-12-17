@@ -79,7 +79,7 @@ export function ServicesList() {
                   href={`/services/${service.slug}`}
                   className="px-6 py-3 bg-[#1e3a5f] text-white font-medium rounded-full hover:bg-[#2a4a6f] transition-colors w-fit"
                 >
-                  Learn More
+                  Learn More about {service.name}
                 </Link>
               </div>
             </div>

@@ -36,20 +36,6 @@ export function LocalBusinessSchema() {
         "name": "Incline Village"
       }
     ],
-    "serviceType": [
-      "Lawn Mowing",
-      "Lawn Edging",
-      "Weed Control",
-      "Landscaping",
-      "Yard Maintenance",
-      "Leaf Raking",
-      "Leaf Removal",
-      "Snow Shoveling",
-      "Snow Removal",
-      "Pine Needle Removal",
-      "Lawn Cleanup",
-      "Seasonal Lawn Care"
-    ],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "Lawn Care Services",

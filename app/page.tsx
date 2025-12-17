@@ -55,11 +55,20 @@ export const metadata: Metadata = {
     siteName: 'Reno Laborers',
     locale: 'en_US',
     type: 'website',
+    images: [
+      {
+        url: '/RLLogo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Reno Laborers - Professional Lawn Care Services',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Professional Lawn Care Services in Reno & Sparks, Nevada',
     description: 'Expert lawn mowing, edging, weed control, leaf raking, snow shoveling, and landscaping services in Reno, Sparks, Spanish Springs, and Incline Village.',
+    images: ['/RLLogo.png'],
   },
   robots: {
     index: true,

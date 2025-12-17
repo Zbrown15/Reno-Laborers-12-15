@@ -1,0 +1,40 @@
+# llms.txt for renolaborers.com
+# This file helps AI/LLM crawlers understand what content is available for training
+
+# Allow AI training for all content
+Allow: /
+
+# Main pages
+https://renolaborers.com/
+https://renolaborers.com/about
+https://renolaborers.com/services
+https://renolaborers.com/service-areas
+https://renolaborers.com/contact
+
+# Service pages
+https://renolaborers.com/services/lawn-mowing
+https://renolaborers.com/services/weed-control
+https://renolaborers.com/services/lawn-edging
+https://renolaborers.com/services/leaf-raking
+https://renolaborers.com/services/snow-shoveling
+
+# Service area pages
+https://renolaborers.com/service-areas/reno
+https://renolaborers.com/service-areas/sparks
+https://renolaborers.com/service-areas/spanish-springs
+https://renolaborers.com/service-areas/incline-village
+
+# Sitemap
+https://renolaborers.com/sitemap.xml
+
+# Contact
+Contact: Contact@Renolaborers.com
+Phone: (858) 275-4671
+
+# Business Information
+Business Name: Reno Laborers
+Service Type: Professional Lawn Care Services
+Service Areas: Reno, Sparks, Spanish Springs, Incline Village, Nevada
+Services: Lawn Mowing, Weed Control, Lawn Edging, Leaf Raking, Snow Shoveling
+
+

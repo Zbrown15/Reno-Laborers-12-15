@@ -44,7 +44,7 @@ export function OtherServiceAreas({ currentAreaSlug }: OtherServiceAreasProps) {
                   {area.description}
                 </p>
                 <span className="text-[#87A96B] text-sm font-medium mt-2 inline-block group-hover:underline">
-                  Learn More →
+                  Learn More about Lawn Care in {area.name} →
                 </span>
               </div>
             </Link>
@@ -54,4 +54,6 @@ export function OtherServiceAreas({ currentAreaSlug }: OtherServiceAreasProps) {
     </section>
   );
 }
+
+
 

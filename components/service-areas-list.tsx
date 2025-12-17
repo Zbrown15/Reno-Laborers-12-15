@@ -53,7 +53,7 @@ export function ServiceAreasList() {
                 href={`/service-areas/${area.slug}`}
                 className="px-6 py-3 bg-[#1e3a5f] text-white font-medium rounded-full hover:bg-[#2a4a6f] transition-colors w-fit mt-2"
               >
-                Learn More
+                Learn More about Lawn Care in {area.name}
               </Link>
             </div>
           </div>
