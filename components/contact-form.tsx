@@ -59,20 +59,23 @@ export function ContactForm() {
     setSubmitStatus("idle");
 
     try {
-      // Convert images to base64 strings for JSON payload
+      // Convert images to base64 strings with filename for JSON payload
       const imagePromises = formData.images.map((file) => {
-        return new Promise<string>((resolve, reject) => {
+        return new Promise<{ data: string; filename: string }>((resolve, reject) => {
           const reader = new FileReader();
           reader.onloadend = () => {
             const base64String = reader.result as string;
-            resolve(base64String);
+            resolve({
+              data: base64String,
+              filename: file.name,
+            });
           };
           reader.onerror = reject;
           reader.readAsDataURL(file);
         });
       });
 
-      const base64Images = await Promise.all(imagePromises);
+      const imageObjects = await Promise.all(imagePromises);
 
       // Create JSON payload
       const payload = {
@@ -82,7 +85,7 @@ export function ContactForm() {
         address: formData.address,
         zipcode: formData.zipcode,
         serviceType: formData.serviceType,
-        images: base64Images,
+        images: imageObjects,
         imageCount: formData.images.length,
         submittedAt: new Date().toISOString(),
       };
