@@ -30,7 +30,7 @@ export function GoogleAnalytics() {
     return null;
   }
 
-  const gaId = process.env.NEXT_PUBLIC_GA_ID || 'G-1YD1RHYNP5';
+  const gaId = process.env.NEXT_PUBLIC_GA_ID || 'G-5NT6H3D4GG';
 
   return (
     <>
