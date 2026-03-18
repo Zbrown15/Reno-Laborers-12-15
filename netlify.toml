@@ -1,3 +1,4 @@
+# Next.js on Netlify — use Node 20 LTS (exact patch like 22.21.1 may be missing on build image)
 [build]
   command = "npm run build"
 
@@ -5,6 +6,5 @@
   package = "@netlify/plugin-nextjs"
 
 [build.environment]
-  NODE_VERSION = "22.21.1"
-  
-# Note: Do not set publish directory - @netlify/plugin-nextjs handles it automatically
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--no-audit --no-fund"
