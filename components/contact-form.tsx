@@ -1,267 +1,116 @@
-"use client";
+\"use client\";
 
-import { useState, FormEvent, ChangeEvent } from "react";
-import { servicesData } from "@/lib/services-data";
-import { motion } from "motion/react";
+import { servicesData } from \"@/lib/services-data\";
+import { motion } from \"motion/react\";
 
-export function ContactForm() {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    phone: "",
-    email: "",
-    address: "",
-    zipcode: "",
-    serviceType: "",
-    images: [] as File[],
-  });
+type ContactFormVariant = \"default\" | \"hero\";
 
-  const [previewImages, setPreviewImages] = useState<string[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
-
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      const fileArray = Array.from(files);
-      setFormData((prev) => ({
-        ...prev,
-        images: [...prev.images, ...fileArray],
-      }));
-
-      // Create previews
-      const newPreviews = fileArray.map((file) => URL.createObjectURL(file));
-      setPreviewImages((prev) => [...prev, ...newPreviews]);
-    }
-  };
-
-  const removeImage = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
-    URL.revokeObjectURL(previewImages[index]);
-    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus("idle");
-
-    try {
-      // Convert images to base64 strings with filename for JSON payload; sanitize to remove whitespace or newlines
-      const imagePromises = formData.images.map((file) => {
-        return new Promise<{ data: string; filename: string }>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            let base64String = "";
-            const result = reader.result as string;
-            if (result.includes(",")) {
-              base64String = result.split(",")[1].replace(/[^A-Za-z0-9+/=]/g, "");
-            } else {
-              base64String = result.replace(/[^A-Za-z0-9+/=]/g, "");
-            }
-            resolve({
-              data: base64String,
-              filename: file.name,
-            });
-          };
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
-      });
-
-      const imageObjects = await Promise.all(imagePromises);
-
-      // Create JSON payload
-      const payload = {
-        firstName: formData.firstName,
-        phone: formData.phone,
-        email: formData.email,
-        address: formData.address,
-        zipcode: formData.zipcode,
-        serviceType: formData.serviceType,
-        images: imageObjects,
-        imageCount: formData.images.length,
-        submittedAt: new Date().toISOString(),
-      };
-
-      // Send to webhook
-      const response = await fetch(
-        "https://hook.us2.make.com/jsglnksrvh8fbkvvfjiwcbvp2mi846w0",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Webhook request failed: ${response.status}`);
-      }
-
-      setSubmitStatus("success");
-      
-      // Reset form
-      setFormData({
-        firstName: "",
-        phone: "",
-        email: "",
-        address: "",
-        zipcode: "",
-        serviceType: "",
-        images: [],
-      });
-      previewImages.forEach((url) => URL.revokeObjectURL(url));
-      setPreviewImages([]);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+export function ContactForm({ variant = \"default\" }: { variant?: ContactFormVariant }) {
+  const isHero = variant === \"hero\";
+  const formName = \"contact\"; // single Netlify form name used on all pages
 
   return (
-    <div className="mx-auto max-w-container px-4">
+    <div className={isHero ? \"w-full\" : \"mx-auto max-w-container px-4\"}>
       <motion.form
-        onSubmit={handleSubmit}
-        className="max-w-2xl mx-auto bg-[#1a2a1a] rounded-lg p-8 md:p-10 space-y-6"
+        name={formName}
+        method=\"POST\"
+        data-netlify=\"true\"
+        data-netlify-honeypot=\"bot-field\"
+        encType=\"multipart/form-data\"
+        className={
+          isHero
+            ? \"w-full bg-[#1a2a1a]/95 rounded-lg p-4 md:p-5 space-y-3\"
+            : \"max-w-2xl mx-auto bg-[#1a2a1a] rounded-lg p-8 md:p-10 space-y-6\"
+        }
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
+        {/* Netlify form wiring */}
+        <input type=\"hidden\" name=\"form-name\" value={formName} />
+        <p className=\"hidden\">
+          <label>
+            Don’t fill this out if you’re human: <input name=\"bot-field\" />
+          </label>
+        </p>
+
         {/* First Name */}
         <div>
           <label
-            htmlFor="firstName"
-            className="block text-white font-medium mb-2"
+            htmlFor={isHero ? \"hero-firstName\" : \"firstName\"}
+            className={`block text-white font-medium ${isHero ? \"mb-1 text-sm\" : \"mb-2\"}`}
           >
-            First Name <span className="text-red-400">*</span>
+            First Name <span className=\"text-red-400\">*</span>
           </label>
           <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleInputChange}
+            type=\"text\"
+            id={isHero ? \"hero-firstName\" : \"firstName\"}
+            name=\"firstName\"
             required
-            className="w-full px-4 py-3 bg-[#182418] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#87A96B] focus:border-transparent transition-colors"
-            placeholder="Enter your first name"
+            className={`w-full px-4 bg-[#182418] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#87A96B] focus:border-transparent transition-colors ${
+              isHero ? \"py-2 text-sm\" : \"py-3\"
+            }`}
+            placeholder=\"Enter your first name\"
           />
         </div>
 
         {/* Phone */}
         <div>
           <label
-            htmlFor="phone"
-            className="block text-white font-medium mb-2"
+            htmlFor={isHero ? \"hero-phone\" : \"phone\"}
+            className={`block text-white font-medium ${isHero ? \"mb-1 text-sm\" : \"mb-2\"}`}
           >
-            Phone <span className="text-red-400">*</span>
+            Phone <span className=\"text-red-400\">*</span>
           </label>
           <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
+            type=\"tel\"
+            id={isHero ? \"hero-phone\" : \"phone\"}
+            name=\"phone\"
             required
-            className="w-full px-4 py-3 bg-[#182418] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#87A96B] focus:border-transparent transition-colors"
-            placeholder="(555) 123-4567"
-          />
-        </div>
-
-        {/* Email */}
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-white font-medium mb-2"
-          >
-            Email <span className="text-red-400">*</span>
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-            className="w-full px-4 py-3 bg-[#182418] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#87A96B] focus:border-transparent transition-colors"
-            placeholder="your.email@example.com"
+            className={`w-full px-4 bg-[#182418] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#87A96B] focus:border-transparent transition-colors ${
+              isHero ? \"py-2 text-sm\" : \"py-3\"
+            }`}
+            placeholder=\"(555) 123-4567\"
           />
         </div>
 
         {/* Address */}
         <div>
           <label
-            htmlFor="address"
-            className="block text-white font-medium mb-2"
+            htmlFor={isHero ? \"hero-address\" : \"address\"}
+            className={`block text-white font-medium ${isHero ? \"mb-1 text-sm\" : \"mb-2\"}`}
           >
-            Address <span className="text-red-400">*</span>
+            Address <span className=\"text-red-400\">*</span>
           </label>
           <input
-            type="text"
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
+            type=\"text\"
+            id={isHero ? \"hero-address\" : \"address\"}
+            name=\"address\"
             required
-            className="w-full px-4 py-3 bg-[#182418] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#87A96B] focus:border-transparent transition-colors"
-            placeholder="123 Main Street"
-          />
-        </div>
-
-        {/* Zipcode */}
-        <div>
-          <label
-            htmlFor="zipcode"
-            className="block text-white font-medium mb-2"
-          >
-            Zipcode <span className="text-red-400">*</span>
-          </label>
-          <input
-            type="text"
-            id="zipcode"
-            name="zipcode"
-            value={formData.zipcode}
-            onChange={handleInputChange}
-            required
-            pattern="[0-9]{5}"
-            maxLength={5}
-            className="w-full px-4 py-3 bg-[#182418] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#87A96B] focus:border-transparent transition-colors"
-            placeholder="89501"
+            className={`w-full px-4 bg-[#182418] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#87A96B] focus:border-transparent transition-colors ${
+              isHero ? \"py-2 text-sm\" : \"py-3\"
+            }`}
+            placeholder=\"123 Main Street\"
           />
         </div>
 
         {/* Service Type */}
         <div>
           <label
-            htmlFor="serviceType"
-            className="block text-white font-medium mb-2"
+            htmlFor={isHero ? \"hero-serviceType\" : \"serviceType\"}
+            className={`block text-white font-medium ${isHero ? \"mb-1 text-sm\" : \"mb-2\"}`}
           >
-            Service Type <span className="text-red-400">*</span>
+            Service Type <span className=\"text-red-400\">*</span>
           </label>
           <select
-            id="serviceType"
-            name="serviceType"
-            value={formData.serviceType}
-            onChange={handleInputChange}
+            id={isHero ? \"hero-serviceType\" : \"serviceType\"}
+            name=\"serviceType\"
             required
-            className="w-full px-4 py-3 bg-[#182418] border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#87A96B] focus:border-transparent transition-colors"
+            className={`w-full px-4 bg-[#182418] border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#87A96B] focus:border-transparent transition-colors ${
+              isHero ? \"py-2 text-sm\" : \"py-3\"
+            }`}
           >
-            <option value="">Select a service</option>
+            <option value=\"\">Select a service</option>
             {servicesData.map((service) => (
               <option key={service.id} value={service.name}>
                 {service.name}
@@ -273,71 +122,39 @@ export function ContactForm() {
         {/* Images */}
         <div>
           <label
-            htmlFor="images"
-            className="block text-white font-medium mb-2"
+            htmlFor={isHero ? \"hero-images\" : \"images\"}
+            className={`block text-white font-medium ${isHero ? \"mb-1 text-sm\" : \"mb-2\"}`}
           >
             Images (Optional)
           </label>
           <input
-            type="file"
-            id="images"
-            name="images"
-            accept="image/*"
+            type=\"file\"
+            id={isHero ? \"hero-images\" : \"images\"}
+            name=\"images\"
+            accept=\"image/*\"
             multiple
-            onChange={handleImageChange}
-            className="w-full px-4 py-3 bg-[#182418] border border-gray-600 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-[#1e3a5f] file:text-white hover:file:bg-[#2a4a6f] file:cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#87A96B] focus:border-transparent transition-colors"
+            className={`w-full px-4 bg-[#182418] border border-gray-600 rounded-lg text-white file:mr-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-[#1e3a5f] file:text-white hover:file:bg-[#2a4a6f] file:cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#87A96B] focus:border-transparent transition-colors ${
+              isHero ? \"py-1.5 file:py-1 file:px-3\" : \"py-3 file:py-2 file:px-4\"
+            }`}
           />
-          <p className="mt-2 text-sm text-gray-400">
-            You can upload multiple images in any format or size
-          </p>
-
-          {/* Image Previews */}
-          {previewImages.length > 0 && (
-            <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
-              {previewImages.map((preview, index) => (
-                <div key={index} className="relative group">
-                  <img
-                    src={preview}
-                    alt={`Preview ${index + 1}`}
-                    className="w-full h-32 object-cover rounded-lg border border-gray-600"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeImage(index)}
-                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
-                    aria-label="Remove image"
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-            </div>
+          {!isHero && (
+            <p className=\"mt-2 text-sm text-gray-400\">
+              You can upload multiple images; Netlify will attach them to the submission.
+            </p>
           )}
         </div>
 
         {/* Submit Button */}
-        <div className="pt-4">
+        <div className={isHero ? \"pt-2\" : \"pt-4\"}>
           <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full px-8 py-4 bg-[#1e3a5f] text-white font-semibold rounded-full text-lg hover:bg-[#2a4a6f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+            type=\"submit\"
+            className={`w-full bg-[#1e3a5f] text-white font-semibold rounded-full hover:bg-[#2a4a6f] transition-colors shadow-lg ${
+              isHero ? \"px-6 py-3 text-sm\" : \"px-8 py-4 text-lg\"
+            }`}
           >
-            {isSubmitting ? "Submitting..." : "Submit Quote Request"}
+            Submit Quote Request
           </button>
         </div>
-
-        {/* Status Messages */}
-        {submitStatus === "success" && (
-          <div className="mt-4 p-4 bg-green-500/20 border border-green-500 rounded-lg text-green-400 text-center">
-            Thank you! Your quote request has been submitted. We'll get back to you soon.
-          </div>
-        )}
-
-        {submitStatus === "error" && (
-          <div className="mt-4 p-4 bg-red-500/20 border border-red-500 rounded-lg text-red-400 text-center">
-            There was an error submitting your request. Please try again or contact us directly.
-          </div>
-        )}
       </motion.form>
     </div>
   );
