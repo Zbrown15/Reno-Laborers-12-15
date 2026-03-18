@@ -1,22 +1,52 @@
 "use client";
 
+import { useState, FormEvent } from "react";
 import { servicesData } from "@/lib/services-data";
 import { motion } from "motion/react";
 
 type ContactFormVariant = "default" | "hero";
 
+/** Netlify Forms + OpenNext v5: fields registered via public/__forms.html; POST target must be that static path */
+const NETLIFY_FORM_ACTION = "/__forms.html";
+
 export function ContactForm({ variant = "default" }: { variant?: ContactFormVariant }) {
   const isHero = variant === "hero";
-  const formName = "contact"; // single Netlify form name used on all pages
+  const formName = "contact";
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+    const form = e.currentTarget;
+
+    try {
+      const fd = new FormData(form);
+      const response = await fetch(NETLIFY_FORM_ACTION, {
+        method: "POST",
+        body: fd,
+      });
+      if (!response.ok) {
+        throw new Error(`Form submit failed: ${response.status}`);
+      }
+      setSubmitStatus("success");
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className={isHero ? "w-full" : "mx-auto max-w-container px-4"}>
       <motion.form
         name={formName}
         method="POST"
-        data-netlify="true"
-        data-netlify-honeypot="bot-field"
         encType="multipart/form-data"
+        onSubmit={handleSubmit}
         className={
           isHero
             ? "w-full bg-[#1a2a1a]/95 rounded-lg p-4 md:p-5 space-y-3"
@@ -26,15 +56,13 @@ export function ContactForm({ variant = "default" }: { variant?: ContactFormVari
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Netlify form wiring */}
         <input type="hidden" name="form-name" value={formName} />
-        <p className="hidden">
+        <p className="hidden" aria-hidden="true">
           <label>
-            Don&apos;t fill this out if you&apos;re human: <input name="bot-field" />
+            Don&apos;t fill this out if you&apos;re human: <input name="bot-field" tabIndex={-1} autoComplete="off" />
           </label>
         </p>
 
-        {/* First Name */}
         <div>
           <label
             htmlFor={isHero ? "hero-firstName" : "firstName"}
@@ -54,7 +82,6 @@ export function ContactForm({ variant = "default" }: { variant?: ContactFormVari
           />
         </div>
 
-        {/* Phone */}
         <div>
           <label
             htmlFor={isHero ? "hero-phone" : "phone"}
@@ -74,7 +101,6 @@ export function ContactForm({ variant = "default" }: { variant?: ContactFormVari
           />
         </div>
 
-        {/* Address */}
         <div>
           <label
             htmlFor={isHero ? "hero-address" : "address"}
@@ -94,7 +120,6 @@ export function ContactForm({ variant = "default" }: { variant?: ContactFormVari
           />
         </div>
 
-        {/* Service Type */}
         <div>
           <label
             htmlFor={isHero ? "hero-serviceType" : "serviceType"}
@@ -119,7 +144,6 @@ export function ContactForm({ variant = "default" }: { variant?: ContactFormVari
           </select>
         </div>
 
-        {/* Images */}
         <div>
           <label
             htmlFor={isHero ? "hero-images" : "images"}
@@ -144,17 +168,37 @@ export function ContactForm({ variant = "default" }: { variant?: ContactFormVari
           )}
         </div>
 
-        {/* Submit Button */}
         <div className={isHero ? "pt-2" : "pt-4"}>
           <button
             type="submit"
-            className={`w-full bg-[#1e3a5f] text-white font-semibold rounded-full hover:bg-[#2a4a6f] transition-colors shadow-lg ${
+            disabled={isSubmitting}
+            className={`w-full bg-[#1e3a5f] text-white font-semibold rounded-full hover:bg-[#2a4a6f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg ${
               isHero ? "px-6 py-3 text-sm" : "px-8 py-4 text-lg"
             }`}
           >
-            Submit Quote Request
+            {isSubmitting ? "Submitting..." : "Submit Quote Request"}
           </button>
         </div>
+
+        {submitStatus === "success" && (
+          <div
+            className={`bg-green-500/20 border border-green-500 rounded-lg text-green-400 text-center ${
+              isHero ? "mt-2 p-3 text-sm" : "mt-4 p-4"
+            }`}
+          >
+            Thank you! Your quote request has been submitted. We&apos;ll get back to you soon.
+          </div>
+        )}
+
+        {submitStatus === "error" && (
+          <div
+            className={`bg-red-500/20 border border-red-500 rounded-lg text-red-400 text-center ${
+              isHero ? "mt-2 p-3 text-sm" : "mt-4 p-4"
+            }`}
+          >
+            Something went wrong. Please try again or call us directly.
+          </div>
+        )}
       </motion.form>
     </div>
   );

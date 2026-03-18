@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Netlify Forms</title>
+  </head>
+  <body>
+    <!-- Deploy-time detection only; real submissions POST here from the app -->
+    <form
+      name="contact"
+      method="POST"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      enctype="multipart/form-data"
+      hidden
+    >
+      <input type="hidden" name="form-name" value="contact" />
+      <input name="bot-field" />
+      <input name="firstName" type="text" />
+      <input name="phone" type="tel" />
+      <input name="address" type="text" />
+      <select name="serviceType">
+        <option value=""></option>
+      </select>
+      <input type="file" name="images" multiple />
+    </form>
+  </body>
+</html>

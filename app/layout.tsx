@@ -104,26 +104,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${unbounded.variable} ${acme.variable}`}>
       <body>
-        {/* Static Netlify form so deploy can detect fields (client ContactForm matches this) */}
-        <form
-          name="contact"
-          method="POST"
-          data-netlify="true"
-          data-netlify-honeypot="bot-field"
-          encType="multipart/form-data"
-          className="hidden"
-          aria-hidden="true"
-        >
-          <input type="hidden" name="form-name" value="contact" />
-          <input name="bot-field" />
-          <input name="firstName" />
-          <input name="phone" />
-          <input name="address" />
-          <select name="serviceType">
-            <option value="" />
-          </select>
-          <input type="file" name="images" />
-        </form>
         <GoogleAnalytics />
         <LocalBusinessSchema />
         <Header />
