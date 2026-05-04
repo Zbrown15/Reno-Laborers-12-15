@@ -14,10 +14,17 @@ export function Footer() {
     { href: "/contact", label: "Contact" },
   ];
 
+  const areaLinks = [
+    { href: "/service-areas/reno", label: "Reno lawn care" },
+    { href: "/service-areas/sparks", label: "Sparks lawn care" },
+    { href: "/service-areas/spanish-springs", label: "Spanish Springs" },
+    { href: "/service-areas/incline-village", label: "Incline Village" },
+  ];
+
   return (
     <footer className="bg-[#182418] text-white border-t border-gray-700">
       <div className="mx-auto max-w-container px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {/* Brand Section */}
           <div>
             <h3 className="text-2xl font-bold mb-4">Reno Laborers</h3>
@@ -43,16 +50,33 @@ export function Footer() {
             </ul>
           </div>
 
+          {/* Local service areas (internal linking) */}
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Local service areas</h4>
+            <ul className="space-y-2">
+              {areaLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-400 hover:text-[#87A96B] transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Contact Information */}
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact Us</h4>
             <div className="space-y-3">
               <a
-                href="mailto:Contact@Renolaborers.com"
+                href="mailto:contact@renoweedpulling.com"
                 className="flex items-center gap-2 text-gray-400 hover:text-[#87A96B] transition-colors"
               >
                 <Mail className="w-5 h-5" />
-                <span>Contact@Renolaborers.com</span>
+                <span>contact@renoweedpulling.com</span>
               </a>
               <a
                 href="tel:+18582754671"

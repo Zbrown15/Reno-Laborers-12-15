@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { LocalSeoParagraphLinks } from "@/components/local-internal-links";
 
 export function CTA() {
   return (
@@ -19,8 +21,17 @@ export function CTA() {
               Get Your Free Quote
             </h2>
             <p className="text-xl md:text-2xl text-white font-semibold max-w-[700px] drop-shadow-md leading-relaxed">
-              Ready to transform your lawn? Get a free, no-obligation quote for professional lawn care services in Reno and Sparks. I provide customized lawn mowing, weed control, edging, and seasonal maintenance solutions tailored to your property's needs.
+              Ready to transform your lawn? Get a free, no-obligation quote for professional lawn care services in Reno and Sparks. I provide customized lawn mowing, weed control, edging, and seasonal maintenance solutions tailored to your property&apos;s needs. Also serving{" "}
+              <Link href="/service-areas/spanish-springs" className="text-[#b8d4a0] hover:underline">
+                Spanish Springs
+              </Link>{" "}
+              and{" "}
+              <Link href="/service-areas/incline-village" className="text-[#b8d4a0] hover:underline">
+                Incline Village
+              </Link>
+              .
             </p>
+            <LocalSeoParagraphLinks className="text-gray-200/90 max-w-2xl drop-shadow-md" />
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-4">
               <a
                 href="/contact"

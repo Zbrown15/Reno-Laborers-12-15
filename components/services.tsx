@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { LocalSeoParagraphLinks } from "@/components/local-internal-links";
 import { Scissors, Sprout, Snowflake, Leaf } from "lucide-react";
 
 const services = [
@@ -53,6 +54,7 @@ export function Services() {
           <p className="text-md max-w-[800px] font-medium text-gray-400 sm:text-xl leading-relaxed">
             Reno Laborers offers professional lawn care and yard maintenance services for your home and business. From regular lawn mowing and precision edging to comprehensive weed control and seasonal cleanup, I ensure your outdoor spaces are both beautiful and well-maintained.
           </p>
+          <LocalSeoParagraphLinks className="max-w-[800px] text-center" />
         </div>
         <div className="space-y-12">
           {services.map((service, index) => {

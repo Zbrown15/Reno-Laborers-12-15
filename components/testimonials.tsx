@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { TestimonialCard, TestimonialAuthor } from "@/components/ui/testimonial-card";
+import { LocalSeoParagraphLinks } from "@/components/local-internal-links";
 
 const testimonials = [
   {
@@ -164,6 +165,7 @@ export function Testimonials() {
             <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/3 bg-gradient-to-l from-[#182418] sm:block" />
           </div>
         </div>
+        <LocalSeoParagraphLinks className="max-w-3xl mx-auto text-center mt-12" />
       </div>
     </section>
   );

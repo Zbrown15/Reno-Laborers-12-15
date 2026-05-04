@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Unbounded, Acme } from 'next/font/google'
 import './globals.css'
 import { LocalBusinessSchema } from '@/components/seo-schema'
+import { INDEX_FOLLOW_PUBLIC } from '@/lib/seo/robots-metadata'
+import { SITE_URL, SITE_GEO } from '@/lib/site-config'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { GoogleAnalytics } from '@/components/google-analytics'
@@ -66,14 +68,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://renolaborers.com'),
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: 'Professional Lawn Care Services in Reno & Sparks, Nevada | Reno Laborers',
     description: 'Expert lawn mowing, edging, weed control, leaf raking, snow shoveling, and landscaping services in Reno, Sparks, Spanish Springs, and Incline Village. Residential and commercial lawn care you can trust.',
-    url: 'https://renolaborers.com',
+    url: SITE_URL,
     siteName: 'Reno Laborers',
     locale: 'en_US',
     type: 'website',
@@ -83,16 +85,13 @@ export const metadata: Metadata = {
     title: 'Professional Lawn Care Services in Reno & Sparks, Nevada',
     description: 'Expert lawn mowing, edging, fertilization, weed control, and landscaping services in Reno, Sparks, Spanish Springs, and Incline Village.',
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
+  robots: INDEX_FOLLOW_PUBLIC,
+  /** Geographic hints for crawlers (complements JSON-LD for local / Maps) */
+  other: {
+    'geo.region': 'US-NV',
+    'geo.placename': 'Reno–Sparks, Nevada',
+    ICBM: `${SITE_GEO.latitude}, ${SITE_GEO.longitude}`,
+    'geo.position': `${SITE_GEO.latitude};${SITE_GEO.longitude}`,
   },
 }
 

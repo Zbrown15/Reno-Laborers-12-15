@@ -1,12 +1,20 @@
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { getServiceBySlug, getAllServiceSlugs } from '@/lib/services-data';
-import { ServiceHero } from '@/components/service-hero';
-import { ServiceQuickInfo } from '@/components/service-quick-info';
-import { ServiceSEO } from '@/components/service-seo';
-import { WhyDoService } from '@/components/why-do-service';
-import { OtherServices } from '@/components/other-services';
-import { ServiceCTA } from '@/components/service-cta';
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { JsonLdScript } from "@/components/seo/json-ld-script";
+import {
+  breadcrumbListSchema,
+  serviceJsonLd,
+  webPageSchema,
+} from "@/lib/seo/structured-data";
+import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
+import { SITE_URL } from "@/lib/site-config";
+import { getServiceBySlug, getAllServiceSlugs } from "@/lib/services-data";
+import { ServiceHero } from "@/components/service-hero";
+import { ServiceQuickInfo } from "@/components/service-quick-info";
+import { ServiceSEO } from "@/components/service-seo";
+import { WhyDoService } from "@/components/why-do-service";
+import { OtherServices } from "@/components/other-services";
+import { ServiceCTA } from "@/components/service-cta";
 
 export async function generateStaticParams() {
   const slugs = getAllServiceSlugs();
@@ -15,13 +23,17 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const service = getServiceBySlug(slug);
-  
+
   if (!service) {
     return {
-      title: 'Service Not Found',
+      title: "Service Not Found",
       robots: {
         index: false,
         follow: false,
@@ -42,23 +54,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       `residential ${service.name.toLowerCase()} reno`,
       `commercial ${service.name.toLowerCase()} sparks`,
     ],
-    authors: [{ name: 'Reno Laborers' }],
-    creator: 'Reno Laborers',
-    publisher: 'Reno Laborers',
-    metadataBase: new URL('https://renolaborers.com'),
+    authors: [{ name: "Reno Laborers" }],
+    creator: "Reno Laborers",
+    publisher: "Reno Laborers",
+    metadataBase: new URL(SITE_URL),
     alternates: {
       canonical: `/services/${service.slug}`,
     },
     openGraph: {
       title: `${service.name} Services in Reno & Sparks, NV | Reno Laborers`,
       description: service.seoParagraph,
-      url: `https://renolaborers.com/services/${service.slug}`,
-      siteName: 'Reno Laborers',
-      locale: 'en_US',
-      type: 'website',
+      url: `${SITE_URL}/services/${service.slug}`,
+      siteName: "Reno Laborers",
+      locale: "en_US",
+      type: "website",
       images: [
         {
-          url: '/RLLogo.png',
+          url: "/RLLogo.png",
           width: 1200,
           height: 630,
           alt: `Reno Laborers - ${service.name} Services`,
@@ -66,22 +78,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: `${service.name} Services in Reno & Sparks, NV`,
       description: service.seoParagraph,
-      images: ['/RLLogo.png'],
+      images: ["/RLLogo.png"],
     },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-      },
-    },
+    robots: INDEX_FOLLOW_PUBLIC,
   };
 }
 
@@ -93,8 +95,21 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
     notFound();
   }
 
+  const pageTitle = `${service.name} Services in Reno & Sparks, NV | Reno Laborers`;
+
   return (
     <>
+      <JsonLdScript
+        schema={[
+          breadcrumbListSchema([
+            { name: "Home", path: "/" },
+            { name: "Services", path: "/services" },
+            { name: service.name, path: `/services/${service.slug}` },
+          ]),
+          webPageSchema(`/services/${service.slug}`, pageTitle, service.seoParagraph),
+          serviceJsonLd(service),
+        ]}
+      />
       <ServiceHero service={service} />
       <main className="bg-[#182418]">
         <ServiceQuickInfo service={service} />
@@ -106,4 +121,3 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
     </>
   );
 }
-

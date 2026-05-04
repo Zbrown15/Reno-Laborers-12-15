@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { LocalSeoParagraphLinks } from "@/components/local-internal-links";
 import { MapPin, Check } from "lucide-react";
 import { serviceAreasData } from "@/lib/service-areas-data";
 
@@ -59,6 +60,7 @@ export function ServiceAreasList() {
           </div>
         </div>
       ))}
+      <LocalSeoParagraphLinks className="pt-4 border-t border-white/10" />
     </div>
   );
 }

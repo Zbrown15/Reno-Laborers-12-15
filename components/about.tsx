@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { LocalSeoParagraphLinks } from "@/components/local-internal-links";
 
 export function About() {
   return (
@@ -17,8 +18,9 @@ export function About() {
             </h3>
             <div className="space-y-4 text-lg text-gray-300 leading-relaxed">
               <p>
-                My name is Zach, and I founded Reno Laborers in late 2024 with a simple mission: to provide professional, reliable lawn care services that deliver the quality results you'd expect from a full crew, all while maintaining the personal attention and care that comes from a dedicated one-person operation. As a one-man show, I take pride in every job I complete. Whether it's weekly lawn mowing, weed control, lawn edging, leaf raking, or snow shoveling, I bring the same level of professionalism and attention to detail to every property. My commitment to excellence means you get consistent, high-quality lawn care services without the overhead costs of a large company.
+                My name is Zach, and I founded Reno Laborers in late 2024 with a simple mission: to provide professional, reliable lawn care services that deliver the quality results you&apos;d expect from a full crew, all while maintaining the personal attention and care that comes from a dedicated one-person operation. As a one-man show, I take pride in every job I complete. Whether it&apos;s weekly lawn mowing, weed control, lawn edging, leaf raking, or snow shoveling, I bring the same level of professionalism and attention to detail to every property. My commitment to excellence means you get consistent, high-quality lawn care services without the overhead costs of a large company.
               </p>
+              <LocalSeoParagraphLinks className="text-base md:text-lg" />
             </div>
           </div>
 

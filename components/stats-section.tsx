@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Users, Star, DollarSign } from "lucide-react";
 
 export function StatsSection() {
@@ -53,6 +54,21 @@ export function StatsSection() {
                 </p>
               </div>
             </div>
+            <p className="text-sm md:text-base text-white/85 max-w-2xl leading-relaxed">
+              Serving Washoe County — explore{" "}
+              <Link href="/service-areas" className="text-[#b8d4a0] font-semibold hover:underline">
+                lawn care by city
+              </Link>
+              , our{" "}
+              <Link href="/services" className="text-[#b8d4a0] font-semibold hover:underline">
+                Reno &amp; Sparks services
+              </Link>
+              , or{" "}
+              <Link href="/contact" className="text-[#b8d4a0] font-semibold hover:underline">
+                contact us for a quote
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
+import Link from "next/link";
 import { ContactForm } from "@/components/contact-form";
 
 export function Hero() {
@@ -58,6 +59,28 @@ export function Hero() {
                 858-275-4671
               </motion.a>
             </motion.div>
+            <motion.p
+              className="text-sm text-white/80 mt-3 max-w-lg leading-relaxed"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 2, delay: 1.2, ease: "easeOut" }}
+            >
+              <Link href="/services" className="text-[#b8d4a0] hover:underline font-medium">
+                Lawn services
+              </Link>
+              {" · "}
+              <Link href="/service-areas" className="text-[#b8d4a0] hover:underline font-medium">
+                Areas we cover
+              </Link>
+              {" · "}
+              <Link href="/service-areas/reno" className="text-[#b8d4a0] hover:underline font-medium">
+                Reno
+              </Link>
+              {" · "}
+              <Link href="/service-areas/sparks" className="text-[#b8d4a0] hover:underline font-medium">
+                Sparks
+              </Link>
+            </motion.p>
           </div>
           {/* Right: contact form - scrollable so hero stays above the fold */}
           <motion.div

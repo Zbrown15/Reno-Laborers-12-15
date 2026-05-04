@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export function StickyCTA() {
   return (
     <div className="bg-gradient-to-b from-[#1e3a5f]/60 to-[#182418]/90 rounded-lg border border-[#87A96B]/30 p-6 sm:p-8 text-center">
@@ -23,9 +25,33 @@ export function StickyCTA() {
           858-275-4671
         </a>
       </div>
-      <div className="mt-6 pt-6 border-t border-[#87A96B]/30">
+      <div className="mt-6 pt-6 border-t border-[#87A96B]/30 space-y-3">
         <p className="text-sm text-gray-400">
-          Serving Reno, Sparks, Spanish Springs, and Incline Village
+          Serving{" "}
+          <Link href="/service-areas/reno" className="text-[#87A96B] hover:underline">
+            Reno
+          </Link>
+          ,{" "}
+          <Link href="/service-areas/sparks" className="text-[#87A96B] hover:underline">
+            Sparks
+          </Link>
+          ,{" "}
+          <Link href="/service-areas/spanish-springs" className="text-[#87A96B] hover:underline">
+            Spanish Springs
+          </Link>
+          , and{" "}
+          <Link href="/service-areas/incline-village" className="text-[#87A96B] hover:underline">
+            Incline Village
+          </Link>
+          . Browse{" "}
+          <Link href="/services" className="text-[#87A96B] hover:underline">
+            all services
+          </Link>{" "}
+          or{" "}
+          <Link href="/about" className="text-[#87A96B] hover:underline">
+            about us
+          </Link>
+          .
         </p>
       </div>
     </div>

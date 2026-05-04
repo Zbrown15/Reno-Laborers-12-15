@@ -1,5 +1,7 @@
 "use client";
 
+import { LocalSeoParagraphLinks } from "@/components/local-internal-links";
+
 export function AboutSEO() {
   return (
     <section className="bg-[#182418] text-white py-12 sm:py-16 md:py-20 px-4">
@@ -15,6 +17,7 @@ export function AboutSEO() {
             <p>
               As a one-person operation, I bring personalized attention and dedication to every property, ensuring consistent quality and reliable service without the overhead costs of larger companies. My commitment to excellence means you receive professional-grade lawn care services at competitive prices, making me the ideal choice for homeowners and businesses seeking affordable, trustworthy lawn maintenance in Reno, Sparks, Spanish Springs, and Incline Village.
             </p>
+            <LocalSeoParagraphLinks className="text-left max-w-3xl mx-auto" />
           </div>
         </div>
       </div>

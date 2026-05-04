@@ -1,13 +1,20 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
+import { JsonLdScript } from "@/components/seo/json-ld-script";
+import { breadcrumbListSchema, webPageSchema } from "@/lib/seo/structured-data";
+import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
+import { SITE_URL } from "@/lib/site-config";
 import { ServiceAreasHero } from "@/components/service-areas-hero";
 import { ServiceAreasList } from "@/components/service-areas-list";
 import { StickyCTA } from "@/components/sticky-cta";
 import { ResidentialServices } from "@/components/residential-services";
 import { StatsSection } from "@/components/stats-section";
 
+const SERVICE_AREAS_INDEX_DESCRIPTION =
+  "Professional lawn care services throughout Reno, Sparks, Spanish Springs, and Incline Village, Nevada. Serving residential and commercial properties with expert lawn maintenance, mowing, edging, and seasonal services.";
+
 export const metadata: Metadata = {
-  title: 'Lawn Care Service Areas in Reno & Sparks, NV | Reno Laborers',
-  description: 'Professional lawn care services throughout Reno, Sparks, Spanish Springs, and Incline Village, Nevada. Serving residential and commercial properties with expert lawn maintenance, mowing, edging, and seasonal services.',
+  title: "Lawn Care Service Areas in Reno & Sparks, NV | Reno Laborers",
+  description: SERVICE_AREAS_INDEX_DESCRIPTION,
   keywords: [
     'lawn care reno',
     'lawn care sparks',
@@ -23,14 +30,14 @@ export const metadata: Metadata = {
   authors: [{ name: 'Reno Laborers' }],
   creator: 'Reno Laborers',
   publisher: 'Reno Laborers',
-  metadataBase: new URL('https://renolaborers.com'),
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: '/service-areas',
   },
   openGraph: {
     title: 'Lawn Care Service Areas in Reno & Sparks, NV | Reno Laborers',
-    description: 'Professional lawn care services throughout Reno, Sparks, Spanish Springs, and Incline Village, Nevada. Serving residential and commercial properties with expert lawn maintenance.',
-    url: 'https://renolaborers.com/service-areas',
+    description: SERVICE_AREAS_INDEX_DESCRIPTION,
+    url: `${SITE_URL}/service-areas`,
     siteName: 'Reno Laborers',
     locale: 'en_US',
     type: 'website',
@@ -49,22 +56,25 @@ export const metadata: Metadata = {
     description: 'Professional lawn care services throughout Reno, Sparks, Spanish Springs, and Incline Village, Nevada.',
     images: ['/RLLogo.png'],
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
+  robots: INDEX_FOLLOW_PUBLIC,
 };
 
 export default function ServiceAreasPage() {
   return (
     <>
+      <JsonLdScript
+        schema={[
+          breadcrumbListSchema([
+            { name: "Home", path: "/" },
+            { name: "Service areas", path: "/service-areas" },
+          ]),
+          webPageSchema(
+            "/service-areas",
+            "Lawn care service areas — Reno, Sparks & Northern Nevada",
+            SERVICE_AREAS_INDEX_DESCRIPTION
+          ),
+        ]}
+      />
       <ServiceAreasHero />
       <main className="bg-[#182418]">
         <div className="mx-auto max-w-container px-4 py-12 sm:py-16 md:py-20">

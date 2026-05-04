@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { LocalSeoParagraphLinks } from "@/components/local-internal-links";
 import { Scissors, Sprout, Snowflake, Leaf } from "lucide-react";
 
 const services = [
@@ -86,6 +87,7 @@ export function ServicesList() {
           </div>
         );
       })}
+      <LocalSeoParagraphLinks className="pt-4 border-t border-white/10" />
     </div>
   );
 }

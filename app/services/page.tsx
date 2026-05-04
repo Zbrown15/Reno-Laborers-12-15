@@ -1,13 +1,20 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
+import { JsonLdScript } from "@/components/seo/json-ld-script";
+import { breadcrumbListSchema, webPageSchema } from "@/lib/seo/structured-data";
+import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
+import { SITE_URL } from "@/lib/site-config";
 import { ServicesHero } from "@/components/services-hero";
 import { ServicesList } from "@/components/services-list";
 import { StickyCTA } from "@/components/sticky-cta";
 import { ResidentialServices } from "@/components/residential-services";
 import { StatsSection } from "@/components/stats-section";
 
+const SERVICES_PAGE_DESCRIPTION =
+  "Professional lawn care services including lawn mowing, weed control, lawn edging, leaf raking, and snow shoveling in Reno, Sparks, Spanish Springs, and Incline Village, Nevada.";
+
 export const metadata: Metadata = {
-  title: 'Lawn Care Services in Reno & Sparks, NV | Reno Laborers',
-  description: 'Professional lawn care services including lawn mowing, weed control, lawn edging, leaf raking, and snow shoveling in Reno, Sparks, Spanish Springs, and Incline Village, Nevada.',
+  title: "Lawn Care Services in Reno & Sparks, NV | Reno Laborers",
+  description: SERVICES_PAGE_DESCRIPTION,
   keywords: [
     'lawn care services reno',
     'lawn mowing services reno',
@@ -23,14 +30,14 @@ export const metadata: Metadata = {
   authors: [{ name: 'Reno Laborers' }],
   creator: 'Reno Laborers',
   publisher: 'Reno Laborers',
-  metadataBase: new URL('https://renolaborers.com'),
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: '/services',
   },
   openGraph: {
     title: 'Lawn Care Services in Reno & Sparks, NV | Reno Laborers',
-    description: 'Professional lawn care services including lawn mowing, weed control, lawn edging, leaf raking, and snow shoveling in Reno, Sparks, Spanish Springs, and Incline Village, Nevada.',
-    url: 'https://renolaborers.com/services',
+    description: SERVICES_PAGE_DESCRIPTION,
+    url: `${SITE_URL}/services`,
     siteName: 'Reno Laborers',
     locale: 'en_US',
     type: 'website',
@@ -49,22 +56,21 @@ export const metadata: Metadata = {
     description: 'Professional lawn care services including lawn mowing, weed control, lawn edging, leaf raking, and snow shoveling in Reno, Sparks, Spanish Springs, and Incline Village, Nevada.',
     images: ['/RLLogo.png'],
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
+  robots: INDEX_FOLLOW_PUBLIC,
 };
 
 export default function ServicesPage() {
   return (
     <>
+      <JsonLdScript
+        schema={[
+          breadcrumbListSchema([
+            { name: "Home", path: "/" },
+            { name: "Services", path: "/services" },
+          ]),
+          webPageSchema("/services", "Lawn care services — Reno & Sparks, NV", SERVICES_PAGE_DESCRIPTION),
+        ]}
+      />
       <ServicesHero />
       <main className="bg-[#182418]">
         <div className="mx-auto max-w-container px-4 py-12 sm:py-16 md:py-20">
