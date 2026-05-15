@@ -5,8 +5,9 @@ import {
   breadcrumbListSchema,
   serviceAreaPlaceAndWebSchema,
 } from "@/lib/seo/structured-data";
+import { faqPageSchema, getServiceAreaFaqPairs } from "@/lib/seo/faq-schema";
 import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
-import { SITE_URL } from "@/lib/site-config";
+import { SITE_URL, SITE_NAME } from "@/lib/site-config";
 import { getServiceAreaBySlug, getAllServiceAreaSlugs } from "@/lib/service-areas-data";
 import { ServiceAreaHero } from "@/components/service-area-hero";
 import { ServiceAreaSEO } from "@/components/service-area-seo";
@@ -15,6 +16,7 @@ import { ServiceAreaContent } from "@/components/service-area-content";
 import { ServiceAreaExperience } from "@/components/service-area-experience";
 import { OtherServiceAreas } from "@/components/other-service-areas";
 import { ServiceAreaCTA } from "@/components/service-area-cta";
+import { SeoRichFaqSection } from "@/components/seo-rich-faq-section";
 
 export async function generateStaticParams() {
   const slugs = getAllServiceAreaSlugs();
@@ -42,7 +44,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `Lawn Care Services in ${area.name} | Reno Laborers`,
+    title: `Lawn Care Services in ${area.name} | ${SITE_NAME}`,
     description: area.seoParagraph,
     keywords: [
       `lawn care ${area.slug}`,
@@ -52,18 +54,18 @@ export async function generateMetadata({
       `lawn maintenance ${area.slug}`,
       `yard maintenance ${area.slug}`,
     ],
-    authors: [{ name: "Reno Laborers" }],
-    creator: "Reno Laborers",
-    publisher: "Reno Laborers",
+    authors: [{ name: SITE_NAME }],
+    creator: SITE_NAME,
+    publisher: SITE_NAME,
     metadataBase: new URL(SITE_URL),
     alternates: {
       canonical: `/service-areas/${area.slug}`,
     },
     openGraph: {
-      title: `Lawn Care Services in ${area.name} | Reno Laborers`,
+      title: `Lawn Care Services in ${area.name} | ${SITE_NAME}`,
       description: area.seoParagraph,
       url: `${SITE_URL}/service-areas/${area.slug}`,
-      siteName: "Reno Laborers",
+      siteName: SITE_NAME,
       locale: "en_US",
       type: "website",
       images: [
@@ -71,7 +73,7 @@ export async function generateMetadata({
           url: "/RLLogo.png",
           width: 1200,
           height: 630,
-          alt: `Reno Laborers - Lawn Care Services in ${area.name}`,
+          alt: `${SITE_NAME} - Lawn Care Services in ${area.name}`,
         },
       ],
     },
@@ -93,6 +95,8 @@ export default async function ServiceAreaPage({ params }: { params: Promise<{ sl
     notFound();
   }
 
+  const areaFaqs = getServiceAreaFaqPairs(area);
+
   return (
     <>
       <JsonLdScript
@@ -103,6 +107,7 @@ export default async function ServiceAreaPage({ params }: { params: Promise<{ sl
             { name: area.name, path: `/service-areas/${area.slug}` },
           ]),
           ...serviceAreaPlaceAndWebSchema(area),
+          faqPageSchema(`/service-areas/${area.slug}`, areaFaqs),
         ]}
       />
       <ServiceAreaHero area={area} />
@@ -112,6 +117,12 @@ export default async function ServiceAreaPage({ params }: { params: Promise<{ sl
         <ServiceAreaContent area={area} />
         <ServiceAreaExperience area={area} />
         <OtherServiceAreas currentAreaSlug={area.slug} />
+        <SeoRichFaqSection
+          id={`service-area-faq-${area.slug}`}
+          heading={`Lawn care in ${area.name}: FAQs`}
+          subheading="Local scheduling, HOA concerns, and what to expect before we show up."
+          faqs={areaFaqs}
+        />
         <ServiceAreaCTA area={area} />
       </main>
     </>

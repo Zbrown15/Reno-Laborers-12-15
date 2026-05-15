@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { ContactForm } from "@/components/contact-form";
+import { SITE_NAME } from "@/lib/site-config";
 
 export function Hero() {
   return (
@@ -34,7 +35,7 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 2.5, delay: 0.5, ease: "easeOut" }}
             >
-              Reno Laborers - Trusted lawn care and yard maintenance services for homeowners and businesses throughout Reno, Sparks, Spanish Springs, and Incline Village.
+              {SITE_NAME} — Trusted lawn care and yard maintenance services for homeowners and businesses throughout Reno, Sparks, Spanish Springs, and Incline Village.
             </motion.p>
             <motion.div
               className="flex flex-col sm:flex-row gap-3 items-start mt-2"

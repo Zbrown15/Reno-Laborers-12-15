@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { SITE_NAME } from "@/lib/site-config";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,13 +26,13 @@ export function Header() {
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <Image
               src="/RLLogo.png"
-              alt="Reno Laborers Logo"
+              alt={`${SITE_NAME} logo`}
               width={50}
               height={50}
               className="w-10 h-10 md:w-12 md:h-12 object-contain"
             />
             <span className="text-xl md:text-2xl font-bold text-white">
-              Reno Laborers
+              {SITE_NAME}
             </span>
           </Link>
 

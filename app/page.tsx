@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
 import { homeWebPageSchema } from "@/lib/seo/structured-data";
+import { faqPageSchema, getHomeFaqPairs } from "@/lib/seo/faq-schema";
 import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
-import { SITE_URL } from "@/lib/site-config";
+import { SITE_URL, SITE_NAME } from "@/lib/site-config";
 import { Hero } from "@/components/hero";
 import { Services } from "@/components/services";
 import { Testimonials } from "@/components/testimonials";
@@ -10,9 +11,10 @@ import { About } from "@/components/about";
 import { CTA } from "@/components/cta";
 import { ResidentialServices } from "@/components/residential-services";
 import { StatsSection } from "@/components/stats-section";
+import { SeoRichFaqSection } from "@/components/seo-rich-faq-section";
 
 export const metadata: Metadata = {
-  title: "Professional Lawn Care Services in Reno & Sparks, Nevada | Reno Laborers",
+  title: `Professional Lawn Care Services in Reno & Sparks, Nevada | ${SITE_NAME}`,
   description:
     "Expert lawn mowing, edging, weed control, leaf raking, snow shoveling, and landscaping services in Reno, Sparks, Spanish Springs, and Incline Village. Residential and commercial lawn care you can trust.",
   keywords: [
@@ -46,19 +48,19 @@ export const metadata: Metadata = {
     "lawn cleanup reno",
     "professional landscaper reno",
   ],
-  authors: [{ name: "Reno Laborers" }],
-  creator: "Reno Laborers",
-  publisher: "Reno Laborers",
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
   metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Professional Lawn Care Services in Reno & Sparks, Nevada | Reno Laborers",
+    title: `Professional Lawn Care Services in Reno & Sparks, Nevada | ${SITE_NAME}`,
     description:
       "Expert lawn mowing, edging, weed control, leaf raking, snow shoveling, and landscaping services in Reno, Sparks, Spanish Springs, and Incline Village. Residential and commercial lawn care you can trust.",
     url: SITE_URL,
-    siteName: "Reno Laborers",
+    siteName: SITE_NAME,
     locale: "en_US",
     type: "website",
     images: [
@@ -66,7 +68,7 @@ export const metadata: Metadata = {
         url: "/RLLogo.png",
         width: 1200,
         height: 630,
-        alt: "Reno Laborers - Professional Lawn Care Services",
+        alt: `${SITE_NAME} - Professional Lawn Care Services`,
       },
     ],
   },
@@ -81,9 +83,11 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  const homeFaqs = getHomeFaqPairs();
+
   return (
     <>
-      <JsonLdScript schema={[homeWebPageSchema()]} />
+      <JsonLdScript schema={[homeWebPageSchema(), faqPageSchema("/", homeFaqs)]} />
       <Hero />
       <main>
         <section aria-label="Customer testimonials">
@@ -98,6 +102,12 @@ export default function Home() {
         <section aria-label="Call to action">
           <CTA />
         </section>
+        <SeoRichFaqSection
+          id="home-faq"
+          heading="Questions homeowners ask us"
+          subheading={`Honest answers about scheduling, pricing, and what to expect from ${SITE_NAME} across Reno, Sparks, and nearby Washoe County.`}
+          faqs={homeFaqs}
+        />
         <section aria-label="Residential lawn care services">
           <ResidentialServices />
         </section>

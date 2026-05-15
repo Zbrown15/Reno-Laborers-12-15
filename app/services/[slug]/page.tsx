@@ -4,10 +4,12 @@ import { JsonLdScript } from "@/components/seo/json-ld-script";
 import {
   breadcrumbListSchema,
   serviceJsonLd,
+  servicePageCatalogSchema,
   webPageSchema,
 } from "@/lib/seo/structured-data";
+import { faqPageSchema, getServiceFaqPairs } from "@/lib/seo/faq-schema";
 import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
-import { SITE_URL } from "@/lib/site-config";
+import { SITE_URL, SITE_NAME } from "@/lib/site-config";
 import { getServiceBySlug, getAllServiceSlugs } from "@/lib/services-data";
 import { ServiceHero } from "@/components/service-hero";
 import { ServiceQuickInfo } from "@/components/service-quick-info";
@@ -15,6 +17,7 @@ import { ServiceSEO } from "@/components/service-seo";
 import { WhyDoService } from "@/components/why-do-service";
 import { OtherServices } from "@/components/other-services";
 import { ServiceCTA } from "@/components/service-cta";
+import { SeoRichFaqSection } from "@/components/seo-rich-faq-section";
 
 export async function generateStaticParams() {
   const slugs = getAllServiceSlugs();
@@ -42,7 +45,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${service.name} Services in Reno & Sparks, NV | Reno Laborers`,
+    title: `${service.name} Services in Reno & Sparks, NV | ${SITE_NAME}`,
     description: service.seoParagraph,
     keywords: [
       `${service.name.toLowerCase()} reno`,
@@ -54,18 +57,18 @@ export async function generateMetadata({
       `residential ${service.name.toLowerCase()} reno`,
       `commercial ${service.name.toLowerCase()} sparks`,
     ],
-    authors: [{ name: "Reno Laborers" }],
-    creator: "Reno Laborers",
-    publisher: "Reno Laborers",
+    authors: [{ name: SITE_NAME }],
+    creator: SITE_NAME,
+    publisher: SITE_NAME,
     metadataBase: new URL(SITE_URL),
     alternates: {
       canonical: `/services/${service.slug}`,
     },
     openGraph: {
-      title: `${service.name} Services in Reno & Sparks, NV | Reno Laborers`,
+      title: `${service.name} Services in Reno & Sparks, NV | ${SITE_NAME}`,
       description: service.seoParagraph,
       url: `${SITE_URL}/services/${service.slug}`,
-      siteName: "Reno Laborers",
+      siteName: SITE_NAME,
       locale: "en_US",
       type: "website",
       images: [
@@ -73,7 +76,7 @@ export async function generateMetadata({
           url: "/RLLogo.png",
           width: 1200,
           height: 630,
-          alt: `Reno Laborers - ${service.name} Services`,
+          alt: `${SITE_NAME} - ${service.name} Services`,
         },
       ],
     },
@@ -95,7 +98,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
     notFound();
   }
 
-  const pageTitle = `${service.name} Services in Reno & Sparks, NV | Reno Laborers`;
+  const pageTitle = `${service.name} Services in Reno & Sparks, NV | ${SITE_NAME}`;
+  const serviceFaqs = getServiceFaqPairs(service);
 
   return (
     <>
@@ -108,6 +112,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           ]),
           webPageSchema(`/services/${service.slug}`, pageTitle, service.seoParagraph),
           serviceJsonLd(service),
+          servicePageCatalogSchema(`/services/${service.slug}`),
+          faqPageSchema(`/services/${service.slug}`, serviceFaqs),
         ]}
       />
       <ServiceHero service={service} />
@@ -116,6 +122,12 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         <ServiceSEO service={service} />
         <WhyDoService service={service} />
         <OtherServices currentServiceSlug={service.slug} />
+        <SeoRichFaqSection
+          id={`service-faq-${service.slug}`}
+          heading={`${service.name}: common questions`}
+          subheading="What Northern Nevada customers usually want cleared up before booking."
+          faqs={serviceFaqs}
+        />
         <ServiceCTA service={service} />
       </main>
     </>

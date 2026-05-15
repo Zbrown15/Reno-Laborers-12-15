@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SITE_NAME } from "@/lib/site-config";
 
 export const metadata: Metadata = {
-  title: "Page not found | Reno Laborers",
+  title: `Page not found | ${SITE_NAME}`,
   robots: {
     index: false,
     follow: true,

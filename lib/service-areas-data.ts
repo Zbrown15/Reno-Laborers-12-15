@@ -82,7 +82,7 @@ export const serviceAreasData: ServiceAreaData[] = [
       title: 'Customer Satisfaction',
       description: 'Your satisfaction is my top priority. I take pride in delivering consistent, high-quality service that exceeds expectations. As a one-person operation, I provide personalized attention to every property, ensuring you receive the reliable, professional service your lawn deserves.'
     },
-    experienceDifference: 'Experience the Difference with Reno Laborers Care in Reno'
+    experienceDifference: 'Experience the Difference with Reno Laborers Lawn Care in Reno'
   },
   {
     id: 'sparks',
@@ -127,7 +127,7 @@ export const serviceAreasData: ServiceAreaData[] = [
       title: 'Customer Satisfaction',
       description: 'I\'m committed to providing exceptional service that keeps Sparks homeowners and businesses satisfied. As a local, one-person operation, I offer personalized attention, reliable scheduling, and consistent quality that you can count on week after week, season after season.'
     },
-    experienceDifference: 'Experience the Difference with Reno Laborers Care in Sparks'
+    experienceDifference: 'Experience the Difference with Reno Laborers Lawn Care in Sparks'
   },
   {
     id: 'spanish-springs',
@@ -172,7 +172,7 @@ export const serviceAreasData: ServiceAreaData[] = [
       title: 'Customer Satisfaction',
       description: 'I\'m dedicated to providing exceptional service that exceeds expectations for Spanish Springs homeowners. My personalized approach, attention to detail, and commitment to quality ensure you receive the reliable, professional lawn care service your property deserves.'
     },
-    experienceDifference: 'Experience the Difference with Reno Laborers Care in Spanish Springs'
+    experienceDifference: 'Experience the Difference with Reno Laborers Lawn Care in Spanish Springs'
   },
   {
     id: 'incline-village',
@@ -217,7 +217,7 @@ export const serviceAreasData: ServiceAreaData[] = [
       title: 'Customer Satisfaction',
       description: 'I\'m committed to providing exceptional service for Incline Village properties. My specialized alpine expertise, attention to detail, and personalized approach ensure you receive the premium lawn care service your property deserves in our unique mountain environment.'
     },
-    experienceDifference: 'Experience the Difference with Reno Laborers Care in Incline Village'
+    experienceDifference: 'Experience the Difference with Reno Laborers Lawn Care in Incline Village'
   }
 ];
 

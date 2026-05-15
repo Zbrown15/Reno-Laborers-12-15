@@ -1,5 +1,7 @@
 "use client";
 
+import { SITE_NAME } from "@/lib/site-config";
+
 export function MissionStatement() {
   return (
     <section className="bg-[#182418] text-white py-12 sm:py-16 md:py-20 px-4">
@@ -10,7 +12,7 @@ export function MissionStatement() {
           </h2>
           <div className="space-y-6 text-lg md:text-xl text-gray-300 leading-relaxed">
             <p>
-              My mission at Reno Laborers is to provide exceptional lawn care services that transform outdoor spaces into beautiful, well-maintained landscapes. I believe every property deserves professional attention, whether it's a small residential yard or a large commercial space.
+              My mission at {SITE_NAME} is to provide exceptional lawn care services that transform outdoor spaces into beautiful, well-maintained landscapes. I believe every property deserves professional attention, whether it's a small residential yard or a large commercial space.
             </p>
             <p>
               I'm committed to delivering reliable, affordable, and expert lawn care services throughout Reno, Sparks, Spanish Springs, and Incline Village. By operating as a one-person service, I ensure personalized attention, direct communication, and consistent quality that larger companies simply can't match.

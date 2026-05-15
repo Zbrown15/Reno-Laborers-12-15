@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { SITE_NAME } from "@/lib/site-config";
 
 const linkClass = "text-[#87A96B] hover:text-[#9abf7a] underline-offset-2 hover:underline font-medium";
 
@@ -78,7 +79,7 @@ export function LocalSeoParagraphLinks({ className = "" }: { className?: string 
       </Link>
       . Learn more{" "}
       <Link href="/about" className={linkClass}>
-        about Reno Laborers
+        about {SITE_NAME}
       </Link>
       .
     </p>

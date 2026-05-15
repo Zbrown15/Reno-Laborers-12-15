@@ -2,13 +2,14 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
+import { SITE_NAME } from "@/lib/site-config";
 
 export function AboutHero() {
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
       <Image
         src="/heroBG.jpg"
-        alt="About Reno Laborers - Professional lawn care services"
+        alt={`About ${SITE_NAME} — Professional lawn care services`}
         fill
         className="object-cover"
         priority
@@ -22,7 +23,7 @@ export function AboutHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 2.5, ease: "easeOut" }}
           >
-            About Reno Laborers
+            About {SITE_NAME}
           </motion.h1>
           <motion.p
             className="text-lg md:text-xl lg:text-2xl text-white/90 font-medium"

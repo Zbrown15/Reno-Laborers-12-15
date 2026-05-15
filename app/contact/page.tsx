@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
 import { breadcrumbListSchema, webPageSchema } from "@/lib/seo/structured-data";
 import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
-import { SITE_URL } from "@/lib/site-config";
+import { SITE_URL, SITE_NAME } from "@/lib/site-config";
 import { ContactForm } from "@/components/contact-form";
 
 const CONTACT_DESCRIPTION =
   "Get a free quote for professional lawn care services in Reno, Sparks, Spanish Springs, and Incline Village. Contact us today for expert lawn mowing, edging, weed control, and more.";
 
 export const metadata: Metadata = {
-  title: "Free Quote | Reno Laborers",
+  title: `Free Quote | ${SITE_NAME}`,
   description: CONTACT_DESCRIPTION,
   keywords: [
     "free quote lawn care reno",
@@ -18,19 +18,19 @@ export const metadata: Metadata = {
     "free estimate lawn care reno",
     "contact lawn care reno",
   ],
-  authors: [{ name: "Reno Laborers" }],
-  creator: "Reno Laborers",
-  publisher: "Reno Laborers",
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
   metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: "/contact",
   },
   openGraph: {
-    title: "Free Quote | Reno Laborers",
+    title: `Free Quote | ${SITE_NAME}`,
     description:
       "Get a free quote for professional lawn care services in Reno, Sparks, Spanish Springs, and Incline Village.",
     url: `${SITE_URL}/contact`,
-    siteName: "Reno Laborers",
+    siteName: SITE_NAME,
     locale: "en_US",
     type: "website",
     images: [
@@ -38,13 +38,13 @@ export const metadata: Metadata = {
         url: "/RLLogo.png",
         width: 1200,
         height: 630,
-        alt: "Reno Laborers - Free Quote",
+        alt: `${SITE_NAME} - Free Quote`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Free Quote | Reno Laborers",
+    title: `Free Quote | ${SITE_NAME}`,
     description:
       "Get a free quote for professional lawn care services in Reno, Sparks, Spanish Springs, and Incline Village.",
     images: ["/RLLogo.png"],
@@ -84,7 +84,7 @@ export default function ContactPage() {
             <div className="prose prose-invert max-w-none">
               <h2 className="text-3xl md:text-4xl font-semibold text-white mb-6">Get Your Free Lawn Care Quote Today</h2>
               <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-6">
-                Ready to transform your lawn with professional lawn care services? Contact Reno Laborers today for a
+                Ready to transform your lawn with professional lawn care services? Contact {SITE_NAME} today for a
                 free, no-obligation quote. I provide expert lawn care services throughout Reno, Sparks, Spanish Springs,
                 and Incline Village, Nevada, including lawn mowing, edging, weed control, leaf raking, and snow
                 shoveling.
@@ -100,9 +100,9 @@ export default function ContactPage() {
                 quote tailored to your specific lawn care needs. You can also call or text me directly at (858)
                 275-4671 for immediate assistance.
               </p>
-              <h3 className="text-2xl md:text-3xl font-semibold text-white mb-4 mt-8">Why Choose Reno Laborers?</h3>
+              <h3 className="text-2xl md:text-3xl font-semibold text-white mb-4 mt-8">Why Choose {SITE_NAME}?</h3>
               <p className="text-lg text-gray-300 leading-relaxed mb-4">
-                When you choose Reno Laborers for your lawn care needs, you&apos;re choosing a trusted local
+                When you choose {SITE_NAME} for your lawn care needs, you&apos;re choosing a trusted local
                 professional who understands the unique challenges of maintaining beautiful lawns in Northern Nevada. I
                 specialize in residential and commercial lawn care services, providing consistent, high-quality results
                 that enhance your property&apos;s curb appeal and value.
@@ -115,7 +115,7 @@ export default function ContactPage() {
               </p>
               <p className="text-lg text-gray-300 leading-relaxed">
                 Don&apos;t wait to give your lawn the professional care it deserves. Request your free quote today and
-                discover how Reno Laborers can help you achieve a beautiful, healthy lawn year-round.
+                discover how {SITE_NAME} can help you achieve a beautiful, healthy lawn year-round.
               </p>
             </div>
           </div>

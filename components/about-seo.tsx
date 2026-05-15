@@ -1,6 +1,7 @@
 "use client";
 
 import { LocalSeoParagraphLinks } from "@/components/local-internal-links";
+import { SITE_NAME } from "@/lib/site-config";
 
 export function AboutSEO() {
   return (
@@ -12,7 +13,7 @@ export function AboutSEO() {
           </h2>
           <div className="text-lg md:text-xl text-gray-300 leading-relaxed space-y-4">
             <p>
-              Reno Laborers is a professional lawn care service specializing in residential and commercial lawn maintenance throughout the Reno-Sparks metropolitan area. Founded in late 2024, I provide comprehensive lawn care solutions including weekly lawn mowing, precision edging, weed control, seasonal leaf raking, and reliable snow shoveling services.
+              {SITE_NAME} is a professional lawn care service specializing in residential and commercial lawn maintenance throughout the Reno-Sparks metropolitan area. Founded in late 2024, I provide comprehensive lawn care solutions including weekly lawn mowing, precision edging, weed control, seasonal leaf raking, and reliable snow shoveling services.
             </p>
             <p>
               As a one-person operation, I bring personalized attention and dedication to every property, ensuring consistent quality and reliable service without the overhead costs of larger companies. My commitment to excellence means you receive professional-grade lawn care services at competitive prices, making me the ideal choice for homeowners and businesses seeking affordable, trustworthy lawn maintenance in Reno, Sparks, Spanish Springs, and Incline Village.

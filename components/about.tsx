@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { LocalSeoParagraphLinks } from "@/components/local-internal-links";
+import { SITE_NAME } from "@/lib/site-config";
 
 export function About() {
   return (
@@ -14,11 +15,11 @@ export function About() {
           {/* Left: Text Content */}
           <div className="flex flex-col">
             <h3 className="text-2xl md:text-3xl font-semibold mb-6">
-              About Reno Laborers
+              About {SITE_NAME}
             </h3>
             <div className="space-y-4 text-lg text-gray-300 leading-relaxed">
               <p>
-                My name is Zach, and I founded Reno Laborers in late 2024 with a simple mission: to provide professional, reliable lawn care services that deliver the quality results you&apos;d expect from a full crew, all while maintaining the personal attention and care that comes from a dedicated one-person operation. As a one-man show, I take pride in every job I complete. Whether it&apos;s weekly lawn mowing, weed control, lawn edging, leaf raking, or snow shoveling, I bring the same level of professionalism and attention to detail to every property. My commitment to excellence means you get consistent, high-quality lawn care services without the overhead costs of a large company.
+                My name is Zach, and I founded {SITE_NAME} in late 2024 with a simple mission: to provide professional, reliable lawn care services that deliver the quality results you&apos;d expect from a full crew, all while maintaining the personal attention and care that comes from a dedicated one-person operation. As a one-man show, I take pride in every job I complete. Whether it&apos;s weekly lawn mowing, weed control, lawn edging, leaf raking, or snow shoveling, I bring the same level of professionalism and attention to detail to every property. My commitment to excellence means you get consistent, high-quality lawn care services without the overhead costs of a large company.
               </p>
               <LocalSeoParagraphLinks className="text-base md:text-lg" />
             </div>
@@ -28,7 +29,7 @@ export function About() {
           <div className="relative w-full h-[400px] md:h-[500px] rounded-lg overflow-hidden">
             <Image
               src="/heroBG.jpg"
-              alt="Reno Laborers lawn care professional"
+              alt={`${SITE_NAME} lawn care professional`}
               fill
               className="object-cover"
             />

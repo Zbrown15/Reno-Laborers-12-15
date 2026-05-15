@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LocalSeoParagraphLinks } from "@/components/local-internal-links";
+import { SITE_NAME } from "@/lib/site-config";
 
 export function ResidentialServices() {
   return (
@@ -25,7 +26,7 @@ export function ResidentialServices() {
           {/* Right: Text Content */}
           <div className="flex flex-col gap-6">
             <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
-              Many homeowners simply don&apos;t have the time or interest to handle their landscaping tasks themselves, which makes Reno Laborers your ideal partner in keeping your lawn looking pristine. My professional residential lawn care services in{" "}
+              Many homeowners simply don&apos;t have the time or interest to handle their landscaping tasks themselves, which makes {SITE_NAME} your ideal partner in keeping your lawn looking pristine. My professional residential lawn care services in{" "}
               <Link href="/service-areas/reno" className="text-[#87A96B] hover:underline font-medium">
                 Reno
               </Link>

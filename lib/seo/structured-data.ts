@@ -8,12 +8,56 @@ import {
   SITE_LOGO_PATH,
   SITE_DEFAULT_DESCRIPTION,
   SITE_GEO,
+  SITE_OPENING_HOURS_JSON_LD,
+  SITE_POSTAL_ADDRESS,
+  SITE_SAME_AS,
   absoluteUrl,
 } from "@/lib/site-config";
 import { getServiceAreaGeo } from "@/lib/seo/service-area-geo";
 
 export const BUSINESS_ID = `${SITE_URL}/#business`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
+export const ORGANIZATION_ID = `${SITE_URL}/#organization`;
+export const OPENING_HOURS_SPEC_ID = `${SITE_URL}/#openingHoursSpecification`;
+
+/** Standalone OpeningHoursSpecification for JSON-LD @graph (referenced by Organization + LocalBusiness). */
+export function businessOpeningHoursSpecificationNode() {
+  return {
+    "@type": "OpeningHoursSpecification",
+    "@id": OPENING_HOURS_SPEC_ID,
+    name: "Business hours",
+    dayOfWeek: [...SITE_OPENING_HOURS_JSON_LD.dayOfWeek],
+    opens: SITE_OPENING_HOURS_JSON_LD.opens,
+    closes: SITE_OPENING_HOURS_JSON_LD.closes,
+  };
+}
+
+/** Business map pin as Schema.org GeoCoordinates (WGS84). */
+export function businessGeoCoordinates() {
+  return {
+    "@type": "GeoCoordinates" as const,
+    latitude: SITE_GEO.latitude,
+    longitude: SITE_GEO.longitude,
+  };
+}
+
+/** Area centroid as GeoCoordinates (service area Place pages). */
+export function areaGeoCoordinates(latitude: string, longitude: string) {
+  return {
+    "@type": "GeoCoordinates" as const,
+    latitude,
+    longitude,
+  };
+}
+export const SERVICE_PAGE_CATALOG_OFFERINGS = [
+  { name: "Lawn mowing & maintenance", path: "/services/lawn-mowing" },
+  { name: "Weed control", path: "/services/weed-control" },
+  { name: "Yard work", path: "/services" },
+  { name: "Leaf Removal", path: "/services/leaf-raking" },
+  { name: "Yard Cleanup", path: "/services" },
+  { name: "Lawn Edging", path: "/services/lawn-edging" },
+  { name: "Snow Removal", path: "/services/snow-shoveling" },
+] as const;
 
 export type BreadcrumbItem = { name: string; path: string };
 
@@ -49,7 +93,7 @@ export function homeWebPageSchema() {
     "@type": "WebPage",
     "@id": `${url}#webpage`,
     url,
-    name: `${SITE_NAME} — Lawn Care in Reno & Sparks, Nevada`,
+    name: `${SITE_NAME} | Reno & Sparks, Nevada`,
     description: SITE_DEFAULT_DESCRIPTION,
     isPartOf: { "@id": WEBSITE_ID },
     about: { "@id": BUSINESS_ID },
@@ -67,12 +111,7 @@ export function serviceJsonLd(service: ServiceData) {
     ? service.image
     : absoluteUrl(service.image);
 
-  const areaServed = [
-    { "@type": "City", name: "Reno", containedInPlace: { "@type": "State", name: "Nevada" } },
-    { "@type": "City", name: "Sparks", containedInPlace: { "@type": "State", name: "Nevada" } },
-    { "@type": "City", name: "Spanish Springs", containedInPlace: { "@type": "State", name: "Nevada" } },
-    { "@type": "City", name: "Incline Village", containedInPlace: { "@type": "State", name: "Nevada" } },
-  ];
+  const areaServed = businessAreaServedForSchema();
 
   return {
     "@type": "Service",
@@ -84,6 +123,43 @@ export function serviceJsonLd(service: ServiceData) {
     provider: { "@id": BUSINESS_ID },
     areaServed,
     serviceType: service.serviceType,
+    geo: businessGeoCoordinates(),
+  };
+}
+
+/**
+ * Full service menu as OfferCatalog (ListItem → Offer → Service) for service detail pages.
+ * Lists all offerings so each /services/[slug] page exposes the complete menu to Google.
+ */
+export function servicePageCatalogSchema(pagePath: string) {
+  const pageUrl = absoluteUrl(pagePath);
+  const areaServed = businessAreaServedForSchema();
+  return {
+    "@type": "OfferCatalog",
+    "@id": `${pageUrl}#service-catalog`,
+    name: "Lawn and yard services",
+    description: `Services offered by ${SITE_NAME} in Reno, Sparks, Spanish Springs, Incline Village, and surrounding Northern Nevada.`,
+    url: pageUrl,
+    provider: { "@id": BUSINESS_ID },
+    itemListElement: SERVICE_PAGE_CATALOG_OFFERINGS.map((entry, index) => {
+      const serviceUrl = absoluteUrl(entry.path);
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Offer",
+          url: serviceUrl,
+          itemOffered: {
+            "@type": "Service",
+            name: entry.name,
+            url: serviceUrl,
+            provider: { "@id": BUSINESS_ID },
+            geo: businessGeoCoordinates(),
+            areaServed,
+          },
+        },
+      };
+    }),
   };
 }
 
@@ -102,11 +178,7 @@ export function serviceAreaPlaceAndWebSchema(area: ServiceAreaData) {
       addressRegion: "NV",
       addressCountry: "US",
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: geo.latitude,
-      longitude: geo.longitude,
-    },
+    geo: areaGeoCoordinates(geo.latitude, geo.longitude),
   };
 
   const webPage = {
@@ -123,10 +195,66 @@ export function serviceAreaPlaceAndWebSchema(area: ServiceAreaData) {
   return [place, webPage];
 }
 
-/** Global @graph: WebSite + LandscapingBusiness (Google Maps / local pack) */
+/** City in Nevada, United States (areaServed) */
+function cityServedInNvUsa(cityName: string) {
+  return {
+    "@type": "City" as const,
+    name: cityName,
+    containedInPlace: {
+      "@type": "State" as const,
+      name: "Nevada",
+      containedInPlace: {
+        "@type": "Country" as const,
+        name: "United States",
+      },
+    },
+  };
+}
+
+/** Washoe County, NV for broader service area signals */
+function washoeCountyServed() {
+  return {
+    "@type": "AdministrativeArea" as const,
+    name: "Washoe County",
+    containedInPlace: {
+      "@type": "State" as const,
+      name: "Nevada",
+      containedInPlace: {
+        "@type": "Country" as const,
+        name: "United States",
+      },
+    },
+  };
+}
+
+/**
+ * Canonical areaServed list (AdministrativeArea + Cities) for Organization, LocalBusiness, and Service JSON-LD.
+ */
+export function businessAreaServedForSchema() {
+  return [
+    washoeCountyServed(),
+    cityServedInNvUsa("Reno"),
+    cityServedInNvUsa("Sparks"),
+    cityServedInNvUsa("Spanish Springs"),
+    cityServedInNvUsa("Incline Village"),
+  ];
+}
+
+/** Global @graph: WebSite + Organization + LawnCare (LocalBusiness) for Google Search & Maps */
 export function globalBusinessGraph() {
   const logoUrl = absoluteUrl(SITE_LOGO_PATH);
   const mapSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${SITE_NAME} Reno NV`)}`;
+
+  const postalAddress = {
+    "@type": "PostalAddress" as const,
+    streetAddress: SITE_POSTAL_ADDRESS.streetAddress,
+    addressLocality: SITE_POSTAL_ADDRESS.addressLocality,
+    addressRegion: SITE_POSTAL_ADDRESS.addressRegion,
+    postalCode: SITE_POSTAL_ADDRESS.postalCode,
+    addressCountry: SITE_POSTAL_ADDRESS.addressCountry,
+  };
+
+  const areaServed = businessAreaServedForSchema();
 
   return [
     {
@@ -136,11 +264,48 @@ export function globalBusinessGraph() {
       name: SITE_NAME,
       description: SITE_DEFAULT_DESCRIPTION,
       inLanguage: "en-US",
-      publisher: { "@id": BUSINESS_ID },
+      publisher: { "@id": ORGANIZATION_ID },
+      copyrightHolder: { "@id": ORGANIZATION_ID },
+      image: {
+        "@type": "ImageObject",
+        url: logoUrl,
+      },
+      sameAs: [...SITE_SAME_AS],
+      about: { "@id": BUSINESS_ID },
+    },
+    businessOpeningHoursSpecificationNode(),
+    {
+      "@type": "Organization",
+      "@id": ORGANIZATION_ID,
+      name: SITE_NAME,
+      description: SITE_DEFAULT_DESCRIPTION,
+      url: SITE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: logoUrl,
+      },
+      image: [logoUrl],
+      email: SITE_EMAIL,
+      telephone: SITE_PHONE_E164,
+      address: postalAddress,
+      geo: businessGeoCoordinates(),
+      areaServed,
+      openingHoursSpecification: { "@id": OPENING_HOURS_SPEC_ID },
+      sameAs: [...SITE_SAME_AS],
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          telephone: SITE_PHONE_E164,
+          email: SITE_EMAIL,
+          availableLanguage: "English",
+        },
+      ],
     },
     {
-      "@type": "LandscapingBusiness",
+      "@type": ["LawnCare", "LocalBusiness"],
       "@id": BUSINESS_ID,
+      parentOrganization: { "@id": ORGANIZATION_ID },
       name: SITE_NAME,
       description: SITE_DEFAULT_DESCRIPTION,
       url: SITE_URL,
@@ -152,30 +317,12 @@ export function globalBusinessGraph() {
         url: logoUrl,
       },
       priceRange: "$$",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Reno",
-        addressRegion: "NV",
-        addressCountry: "US",
-      },
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: SITE_GEO.latitude,
-        longitude: SITE_GEO.longitude,
-      },
+      address: postalAddress,
+      geo: businessGeoCoordinates(),
       hasMap: mapSearchUrl,
-      areaServed: [
-        { "@type": "City", name: "Reno" },
-        { "@type": "City", name: "Sparks" },
-        { "@type": "City", name: "Spanish Springs" },
-        { "@type": "City", name: "Incline Village" },
-      ],
-      openingHoursSpecification: {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        opens: "08:00",
-        closes: "18:00",
-      },
+      areaServed,
+      sameAs: [...SITE_SAME_AS],
+      openingHoursSpecification: { "@id": OPENING_HOURS_SPEC_ID },
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: "Lawn care services",
@@ -186,6 +333,7 @@ export function globalBusinessGraph() {
               "@type": "Service",
               name: "Lawn mowing",
               description: "Residential and commercial lawn mowing in Washoe County, NV",
+              areaServed,
             },
           },
           {
@@ -194,6 +342,7 @@ export function globalBusinessGraph() {
               "@type": "Service",
               name: "Weed control",
               description: "Weed treatment and prevention for Reno–Sparks lawns",
+              areaServed,
             },
           },
           {
@@ -202,6 +351,7 @@ export function globalBusinessGraph() {
               "@type": "Service",
               name: "Snow shoveling",
               description: "Driveway and walkway snow removal",
+              areaServed,
             },
           },
         ],

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { TestimonialCard, TestimonialAuthor } from "@/components/ui/testimonial-card";
 import { LocalSeoParagraphLinks } from "@/components/local-internal-links";
+import { SITE_NAME } from "@/lib/site-config";
 
 const testimonials = [
   {
@@ -19,7 +20,7 @@ const testimonials = [
       handle: "",
       location: "Sparks, NV"
     },
-    text: "Had Reno Laborers mow my front lawn today, it looks amazing! Highly recommend."
+    text: `Had ${SITE_NAME} mow my front lawn today, it looks amazing! Highly recommend.`,
   },
   {
     author: {

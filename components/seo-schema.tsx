@@ -1,7 +1,7 @@
 import { JsonLdScript } from "@/components/seo/json-ld-script";
 import { globalBusinessGraph } from "@/lib/seo/structured-data";
 
-/** Site-wide LocalBusiness + WebSite JSON-LD (Google Search & Maps) */
+/** Site-wide WebSite + Organization + LawnCare (LocalBusiness) JSON-LD (Google Search & Maps) */
 export function LocalBusinessSchema() {
   return <JsonLdScript schema={globalBusinessGraph()} />;
 }

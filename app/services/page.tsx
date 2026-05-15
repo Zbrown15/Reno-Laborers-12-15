@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
 import { breadcrumbListSchema, webPageSchema } from "@/lib/seo/structured-data";
 import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
-import { SITE_URL } from "@/lib/site-config";
+import { SITE_URL, SITE_NAME } from "@/lib/site-config";
 import { ServicesHero } from "@/components/services-hero";
 import { ServicesList } from "@/components/services-list";
 import { StickyCTA } from "@/components/sticky-cta";
@@ -13,7 +13,7 @@ const SERVICES_PAGE_DESCRIPTION =
   "Professional lawn care services including lawn mowing, weed control, lawn edging, leaf raking, and snow shoveling in Reno, Sparks, Spanish Springs, and Incline Village, Nevada.";
 
 export const metadata: Metadata = {
-  title: "Lawn Care Services in Reno & Sparks, NV | Reno Laborers",
+  title: `Lawn Care Services in Reno & Sparks, NV | ${SITE_NAME}`,
   description: SERVICES_PAGE_DESCRIPTION,
   keywords: [
     'lawn care services reno',
@@ -27,18 +27,18 @@ export const metadata: Metadata = {
     'lawn maintenance services reno',
     'yard maintenance reno'
   ],
-  authors: [{ name: 'Reno Laborers' }],
-  creator: 'Reno Laborers',
-  publisher: 'Reno Laborers',
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
   metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: '/services',
   },
   openGraph: {
-    title: 'Lawn Care Services in Reno & Sparks, NV | Reno Laborers',
+    title: `Lawn Care Services in Reno & Sparks, NV | ${SITE_NAME}`,
     description: SERVICES_PAGE_DESCRIPTION,
     url: `${SITE_URL}/services`,
-    siteName: 'Reno Laborers',
+    siteName: SITE_NAME,
     locale: 'en_US',
     type: 'website',
     images: [
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
         url: '/RLLogo.png',
         width: 1200,
         height: 630,
-        alt: 'Reno Laborers - Lawn Care Services',
+        alt: `${SITE_NAME} - Lawn Care Services`,
       },
     ],
   },
@@ -78,7 +78,7 @@ export default function ServicesPage() {
             <div className="prose prose-invert max-w-none">
               <h2 className="text-3xl md:text-4xl font-semibold text-white mb-6">Comprehensive Lawn Care Services in Reno and Sparks</h2>
               <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-6">
-                At Reno Laborers, I provide professional lawn care services designed to keep your property looking its best year-round. Whether you own a residential home or manage a commercial property in Reno, Sparks, Spanish Springs, or Incline Village, Nevada, I offer comprehensive lawn maintenance solutions tailored to your specific needs.
+                At {SITE_NAME}, I provide professional lawn care services designed to keep your property looking its best year-round. Whether you own a residential home or manage a commercial property in Reno, Sparks, Spanish Springs, or Incline Village, Nevada, I offer comprehensive lawn maintenance solutions tailored to your specific needs.
               </p>
               <p className="text-lg text-gray-300 leading-relaxed mb-6">
                 My services include regular lawn mowing with proper grass cutting techniques, precision lawn edging for clean borders along driveways and walkways, comprehensive weed control to eliminate existing weeds and prevent future growth, thorough leaf raking and seasonal cleanup services, and reliable snow shoveling during winter months. Each service is performed with attention to detail and professional-grade equipment to ensure exceptional results.

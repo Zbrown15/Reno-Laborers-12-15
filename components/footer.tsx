@@ -1,7 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { Mail, Phone } from "lucide-react";
+import { Clock, Mail, Phone } from "lucide-react";
+import {
+  GOOGLE_MAPS_EMBED_URL,
+  SITE_NAME,
+  SITE_HOURS_DISPLAY_LINE,
+} from "@/lib/site-config";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -27,7 +32,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {/* Brand Section */}
           <div>
-            <h3 className="text-2xl font-bold mb-4">Reno Laborers</h3>
+            <h3 className="text-2xl font-bold mb-4">{SITE_NAME}</h3>
             <p className="text-gray-400 mb-4">
               Professional lawn care and yard maintenance services for homeowners and businesses throughout Reno, Sparks, Spanish Springs, and Incline Village.
             </p>
@@ -85,6 +90,15 @@ export function Footer() {
                 <Phone className="w-5 h-5" />
                 <span>(858) 275-4671</span>
               </a>
+              <div className="flex items-start gap-2 text-gray-400 pt-1">
+                <Clock className="w-5 h-5 flex-shrink-0 mt-0.5 text-[#87A96B]" aria-hidden />
+                <div>
+                  <p className="text-white font-semibold text-sm uppercase tracking-wide">
+                    Hours
+                  </p>
+                  <p className="text-sm leading-snug mt-1">{SITE_HOURS_DISPLAY_LINE}</p>
+                </div>
+              </div>
               <a
                 href="/contact"
                 className="inline-block mt-4 px-6 py-2 bg-[#1e3a5f] text-white font-semibold rounded-full hover:bg-[#2a4a6f] transition-colors"
@@ -95,9 +109,36 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Google Maps — local relevance + NAP context */}
+        <section
+          className="mt-10 md:mt-14"
+          aria-labelledby="footer-map-heading"
+        >
+          <h4
+            id="footer-map-heading"
+            className="text-lg font-semibold mb-3 text-white"
+          >
+            Find us on the map
+          </h4>
+          <p className="text-sm text-gray-400 mb-4 max-w-2xl">
+            {SITE_NAME} serves Reno, Sparks, Spanish Springs, and
+            Incline Village. View our Google Business location below.
+          </p>
+          <div className="relative w-full overflow-hidden rounded-lg border border-gray-700 bg-[#1e3a5f]/20 aspect-[16/10] max-h-[420px]">
+            <iframe
+              src={GOOGLE_MAPS_EMBED_URL}
+              title={`${SITE_NAME} — Google Maps`}
+              className="absolute inset-0 h-full w-full border-0"
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </section>
+
         {/* Copyright */}
         <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
-          <p>&copy; {currentYear} Reno Laborers. All rights reserved.</p>
+          <p>&copy; {currentYear} {SITE_NAME}. All rights reserved.</p>
         </div>
       </div>
     </footer>
