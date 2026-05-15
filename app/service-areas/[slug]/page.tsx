@@ -4,10 +4,11 @@ import { JsonLdScript } from "@/components/seo/json-ld-script";
 import {
   breadcrumbListSchema,
   serviceAreaPlaceAndWebSchema,
+  webSiteStubNode,
 } from "@/lib/seo/structured-data";
 import { faqPageSchema, getServiceAreaFaqPairs } from "@/lib/seo/faq-schema";
 import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
-import { SITE_URL, SITE_NAME } from "@/lib/site-config";
+import { SITE_URL, SITE_NAME, absoluteUrl } from "@/lib/site-config";
 import { getServiceAreaBySlug, getAllServiceAreaSlugs } from "@/lib/service-areas-data";
 import { ServiceAreaHero } from "@/components/service-area-hero";
 import { ServiceAreaSEO } from "@/components/service-area-seo";
@@ -43,6 +44,8 @@ export async function generateMetadata({
     };
   }
 
+  const ogImageUrl = area.image.startsWith("http") ? area.image : absoluteUrl(area.image);
+
   return {
     title: `Lawn Care Services in ${area.name} | ${SITE_NAME}`,
     description: area.seoParagraph,
@@ -70,10 +73,10 @@ export async function generateMetadata({
       type: "website",
       images: [
         {
-          url: "/RLLogo.png",
+          url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: `${SITE_NAME} - Lawn Care Services in ${area.name}`,
+          alt: `${SITE_NAME} — lawn care in ${area.name}`,
         },
       ],
     },
@@ -81,7 +84,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: `Lawn Care Services in ${area.name}`,
       description: area.seoParagraph,
-      images: ["/RLLogo.png"],
+      images: [ogImageUrl],
     },
     robots: INDEX_FOLLOW_PUBLIC,
   };
@@ -101,6 +104,7 @@ export default async function ServiceAreaPage({ params }: { params: Promise<{ sl
     <>
       <JsonLdScript
         schema={[
+          webSiteStubNode(),
           breadcrumbListSchema([
             { name: "Home", path: "/" },
             { name: "Service areas", path: "/service-areas" },

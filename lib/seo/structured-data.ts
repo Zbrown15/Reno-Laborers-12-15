@@ -1,5 +1,7 @@
 import type { ServiceData } from "@/lib/services-data";
 import type { ServiceAreaData } from "@/lib/service-areas-data";
+import { servicesData } from "@/lib/services-data";
+import { serviceAreasData } from "@/lib/service-areas-data";
 import {
   SITE_URL,
   SITE_NAME,
@@ -19,6 +21,20 @@ export const BUSINESS_ID = `${SITE_URL}/#business`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
 export const ORGANIZATION_ID = `${SITE_URL}/#organization`;
 export const OPENING_HOURS_SPEC_ID = `${SITE_URL}/#openingHoursSpecification`;
+
+/**
+ * Minimal WebSite node so each page’s WebPage `isPartOf` resolves without repeating the full business @graph.
+ * The complete WebSite entity (publisher, sameAs, etc.) is emitted on the homepage only.
+ */
+export function webSiteStubNode() {
+  return {
+    "@type": "WebSite" as const,
+    "@id": WEBSITE_ID,
+    url: absoluteUrl("/"),
+    name: SITE_NAME,
+    inLanguage: "en-US",
+  };
+}
 
 /** Standalone OpeningHoursSpecification for JSON-LD @graph (referenced by Organization + LocalBusiness). */
 export function businessOpeningHoursSpecificationNode() {
@@ -73,16 +89,23 @@ export function breadcrumbListSchema(items: BreadcrumbItem[]) {
   };
 }
 
-export function webPageSchema(path: string, name: string, description: string) {
+export type WebPageSchemaOptions = {
+  pageType?: "WebPage" | "AboutPage" | "ContactPage";
+  /** e.g. primary entity on the page (Service, Place, FAQPage uses separate node) */
+  mainEntity?: { "@id": string };
+};
+
+export function webPageSchema(path: string, name: string, description: string, options?: WebPageSchemaOptions) {
   const url = absoluteUrl(path);
+  const pageType = options?.pageType ?? "WebPage";
   return {
-    "@type": "WebPage",
+    "@type": pageType,
     "@id": `${url}#webpage`,
     url,
     name,
     description,
     isPartOf: { "@id": WEBSITE_ID },
-    about: { "@id": BUSINESS_ID },
+    ...(options?.mainEntity ? { mainEntity: options.mainEntity } : {}),
   };
 }
 
@@ -100,6 +123,66 @@ export function homeWebPageSchema() {
     primaryImageOfPage: {
       "@type": "ImageObject",
       url: absoluteUrl(SITE_LOGO_PATH),
+    },
+  };
+}
+
+/** /services — CollectionPage + ItemList so the HTML source lists every service URL for crawlers. */
+export function servicesIndexCollectionPageSchema(name: string, description: string) {
+  const pageUrl = absoluteUrl("/services");
+  const itemListElement = servicesData.map((s, index) => ({
+    "@type": "ListItem" as const,
+    position: index + 1,
+    item: {
+      "@type": "Service" as const,
+      name: `${s.name} — Reno, Sparks & Washoe County`,
+      description: s.quickDescription,
+      url: absoluteUrl(`/services/${s.slug}`),
+    },
+  }));
+  return {
+    "@type": "CollectionPage",
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name,
+    description,
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: {
+      "@type": "ItemList",
+      name: `${SITE_NAME} — lawn and yard services (Northern Nevada)`,
+      description: `Service detail pages: ${servicesData.map((s) => s.name).join(", ")}.`,
+      numberOfItems: servicesData.length,
+      itemListElement,
+    },
+  };
+}
+
+/** /service-areas — CollectionPage + ItemList of city/area landing pages. */
+export function serviceAreasIndexCollectionPageSchema(name: string, description: string) {
+  const pageUrl = absoluteUrl("/service-areas");
+  const itemListElement = serviceAreasData.map((a, index) => ({
+    "@type": "ListItem" as const,
+    position: index + 1,
+    item: {
+      "@type": "Place" as const,
+      name: `Lawn care in ${a.name}`,
+      description: a.description,
+      url: absoluteUrl(`/service-areas/${a.slug}`),
+    },
+  }));
+  return {
+    "@type": "CollectionPage",
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name,
+    description,
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: {
+      "@type": "ItemList",
+      name: `${SITE_NAME} — Northern Nevada service areas`,
+      description: `Area pages: ${serviceAreasData.map((a) => a.name).join(", ")}.`,
+      numberOfItems: serviceAreasData.length,
+      itemListElement,
     },
   };
 }
@@ -172,6 +255,7 @@ export function serviceAreaPlaceAndWebSchema(area: ServiceAreaData) {
     "@type": "Place",
     "@id": `${url}#place`,
     name: `${SITE_NAME} — ${area.name}, NV`,
+    description: area.description,
     address: {
       "@type": "PostalAddress",
       addressLocality: area.name,
@@ -188,7 +272,6 @@ export function serviceAreaPlaceAndWebSchema(area: ServiceAreaData) {
     name: `Lawn Care Services in ${area.name} | ${SITE_NAME}`,
     description: area.seoParagraph,
     isPartOf: { "@id": WEBSITE_ID },
-    about: { "@id": `${url}#place` },
     mainEntity: { "@id": `${url}#place` },
   };
 

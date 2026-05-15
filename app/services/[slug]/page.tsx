@@ -6,10 +6,11 @@ import {
   serviceJsonLd,
   servicePageCatalogSchema,
   webPageSchema,
+  webSiteStubNode,
 } from "@/lib/seo/structured-data";
 import { faqPageSchema, getServiceFaqPairs } from "@/lib/seo/faq-schema";
 import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
-import { SITE_URL, SITE_NAME } from "@/lib/site-config";
+import { SITE_URL, SITE_NAME, absoluteUrl } from "@/lib/site-config";
 import { getServiceBySlug, getAllServiceSlugs } from "@/lib/services-data";
 import { ServiceHero } from "@/components/service-hero";
 import { ServiceQuickInfo } from "@/components/service-quick-info";
@@ -44,6 +45,10 @@ export async function generateMetadata({
     };
   }
 
+  const ogImageUrl = service.image.startsWith("http")
+    ? service.image
+    : absoluteUrl(service.image);
+
   return {
     title: `${service.name} Services in Reno & Sparks, NV | ${SITE_NAME}`,
     description: service.seoParagraph,
@@ -73,10 +78,10 @@ export async function generateMetadata({
       type: "website",
       images: [
         {
-          url: "/RLLogo.png",
+          url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: `${SITE_NAME} - ${service.name} Services`,
+          alt: `${SITE_NAME} — ${service.name} in Reno & Sparks, Nevada`,
         },
       ],
     },
@@ -84,7 +89,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: `${service.name} Services in Reno & Sparks, NV`,
       description: service.seoParagraph,
-      images: ["/RLLogo.png"],
+      images: [ogImageUrl],
     },
     robots: INDEX_FOLLOW_PUBLIC,
   };
@@ -100,17 +105,21 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
   const pageTitle = `${service.name} Services in Reno & Sparks, NV | ${SITE_NAME}`;
   const serviceFaqs = getServiceFaqPairs(service);
+  const servicePageUrl = absoluteUrl(`/services/${service.slug}`);
 
   return (
     <>
       <JsonLdScript
         schema={[
+          webSiteStubNode(),
           breadcrumbListSchema([
             { name: "Home", path: "/" },
             { name: "Services", path: "/services" },
             { name: service.name, path: `/services/${service.slug}` },
           ]),
-          webPageSchema(`/services/${service.slug}`, pageTitle, service.seoParagraph),
+          webPageSchema(`/services/${service.slug}`, pageTitle, service.seoParagraph, {
+            mainEntity: { "@id": `${servicePageUrl}#service` },
+          }),
           serviceJsonLd(service),
           servicePageCatalogSchema(`/services/${service.slug}`),
           faqPageSchema(`/services/${service.slug}`, serviceFaqs),

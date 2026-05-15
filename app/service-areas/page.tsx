@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
-import { breadcrumbListSchema, webPageSchema } from "@/lib/seo/structured-data";
+import {
+  breadcrumbListSchema,
+  serviceAreasIndexCollectionPageSchema,
+  webSiteStubNode,
+} from "@/lib/seo/structured-data";
 import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
 import { SITE_URL, SITE_NAME } from "@/lib/site-config";
 import { ServiceAreasHero } from "@/components/service-areas-hero";
@@ -43,10 +47,10 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/RLLogo.png',
+        url: '/frontLandscaping.jpg',
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} - Service Areas`,
+        alt: `${SITE_NAME} — Reno, Sparks, Spanish Springs, Incline Village lawn care`,
       },
     ],
   },
@@ -54,7 +58,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Lawn Care Service Areas in Reno & Sparks, NV',
     description: 'Professional lawn care services throughout Reno, Sparks, Spanish Springs, and Incline Village, Nevada.',
-    images: ['/RLLogo.png'],
+    images: ['/frontLandscaping.jpg'],
   },
   robots: INDEX_FOLLOW_PUBLIC,
 };
@@ -64,13 +68,13 @@ export default function ServiceAreasPage() {
     <>
       <JsonLdScript
         schema={[
+          webSiteStubNode(),
           breadcrumbListSchema([
             { name: "Home", path: "/" },
             { name: "Service areas", path: "/service-areas" },
           ]),
-          webPageSchema(
-            "/service-areas",
-            "Lawn care service areas — Reno, Sparks & Northern Nevada",
+          serviceAreasIndexCollectionPageSchema(
+            `Lawn care service areas in Reno & Sparks, NV | ${SITE_NAME}`,
             SERVICE_AREAS_INDEX_DESCRIPTION
           ),
         ]}

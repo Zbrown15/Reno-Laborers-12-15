@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
-import { breadcrumbListSchema, webPageSchema } from "@/lib/seo/structured-data";
+import { breadcrumbListSchema, webPageSchema, webSiteStubNode } from "@/lib/seo/structured-data";
 import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
 import { SITE_URL, SITE_NAME } from "@/lib/site-config";
 import { ContactForm } from "@/components/contact-form";
@@ -35,10 +35,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/RLLogo.png",
+        url: "/lawnHouseIMG.jpg",
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} - Free Quote`,
+        alt: `${SITE_NAME} — free lawn care quote, Reno & Sparks NV`,
       },
     ],
   },
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     title: `Free Quote | ${SITE_NAME}`,
     description:
       "Get a free quote for professional lawn care services in Reno, Sparks, Spanish Springs, and Incline Village.",
-    images: ["/RLLogo.png"],
+    images: ["/lawnHouseIMG.jpg"],
   },
   robots: INDEX_FOLLOW_PUBLIC,
 };
@@ -57,11 +57,14 @@ export default function ContactPage() {
     <>
       <JsonLdScript
         schema={[
+          webSiteStubNode(),
           breadcrumbListSchema([
             { name: "Home", path: "/" },
             { name: "Contact", path: "/contact" },
           ]),
-          webPageSchema("/contact", "Free lawn care quote — Reno & Sparks, NV", CONTACT_DESCRIPTION),
+          webPageSchema("/contact", "Free lawn care quote — Reno & Sparks, NV", CONTACT_DESCRIPTION, {
+            pageType: "ContactPage",
+          }),
         ]}
       />
       <div className="relative min-h-[60vh] w-full overflow-hidden">

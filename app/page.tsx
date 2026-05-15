@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
-import { homeWebPageSchema } from "@/lib/seo/structured-data";
+import { homeWebPageSchema, globalBusinessGraph } from "@/lib/seo/structured-data";
 import { faqPageSchema, getHomeFaqPairs } from "@/lib/seo/faq-schema";
 import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
-import { SITE_URL, SITE_NAME } from "@/lib/site-config";
+import { SITE_URL, SITE_NAME, SITE_GEO, absoluteUrl } from "@/lib/site-config";
 import { Hero } from "@/components/hero";
 import { Services } from "@/components/services";
 import { Testimonials } from "@/components/testimonials";
@@ -59,16 +59,16 @@ export const metadata: Metadata = {
     title: `Professional Lawn Care Services in Reno & Sparks, Nevada | ${SITE_NAME}`,
     description:
       "Expert lawn mowing, edging, weed control, leaf raking, snow shoveling, and landscaping services in Reno, Sparks, Spanish Springs, and Incline Village. Residential and commercial lawn care you can trust.",
-    url: SITE_URL,
+    url: absoluteUrl("/"),
     siteName: SITE_NAME,
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "/RLLogo.png",
-        width: 1200,
-        height: 630,
-        alt: `${SITE_NAME} - Professional Lawn Care Services`,
+        url: "/heroBG.jpg",
+        width: 1920,
+        height: 1080,
+        alt: `${SITE_NAME} — lawn care and yard work in Reno, Sparks, and Washoe County, Nevada`,
       },
     ],
   },
@@ -77,9 +77,15 @@ export const metadata: Metadata = {
     title: "Professional Lawn Care Services in Reno & Sparks, Nevada",
     description:
       "Expert lawn mowing, edging, weed control, leaf raking, snow shoveling, and landscaping services in Reno, Sparks, Spanish Springs, and Incline Village.",
-    images: ["/RLLogo.png"],
+    images: ["/heroBG.jpg"],
   },
   robots: INDEX_FOLLOW_PUBLIC,
+  other: {
+    "geo.region": "US-NV",
+    "geo.placename": "Reno–Sparks, Nevada",
+    ICBM: `${SITE_GEO.latitude}, ${SITE_GEO.longitude}`,
+    "geo.position": `${SITE_GEO.latitude};${SITE_GEO.longitude}`,
+  },
 };
 
 export default function Home() {
@@ -87,7 +93,9 @@ export default function Home() {
 
   return (
     <>
-      <JsonLdScript schema={[homeWebPageSchema(), faqPageSchema("/", homeFaqs)]} />
+      <JsonLdScript
+        schema={[...globalBusinessGraph(), homeWebPageSchema(), faqPageSchema("/", homeFaqs)]}
+      />
       <Hero />
       <main>
         <section aria-label="Customer testimonials">

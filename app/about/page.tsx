@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { JsonLdScript } from "@/components/seo/json-ld-script";
-import { breadcrumbListSchema, webPageSchema } from "@/lib/seo/structured-data";
+import { breadcrumbListSchema, webPageSchema, webSiteStubNode } from "@/lib/seo/structured-data";
 import { INDEX_FOLLOW_PUBLIC } from "@/lib/seo/robots-metadata";
 import { SITE_URL, SITE_NAME } from "@/lib/site-config";
 import { AboutHero } from "@/components/about-hero";
@@ -43,10 +43,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/RLLogo.png",
+        url: "/heroBG.jpg",
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} - About Us`,
+        alt: `${SITE_NAME} — lawn care in Reno and Sparks, Nevada`,
       },
     ],
   },
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     title: `About ${SITE_NAME} - Professional Lawn Care Services`,
     description:
       `Learn about ${SITE_NAME}, your trusted one-person lawn care service in Reno and Sparks, Nevada.`,
-    images: ["/RLLogo.png"],
+    images: ["/heroBG.jpg"],
   },
   robots: INDEX_FOLLOW_PUBLIC,
 };
@@ -65,11 +65,14 @@ export default function AboutPage() {
     <>
       <JsonLdScript
         schema={[
+          webSiteStubNode(),
           breadcrumbListSchema([
             { name: "Home", path: "/" },
             { name: "About", path: "/about" },
           ]),
-          webPageSchema("/about", `About ${SITE_NAME} — Lawn Care Reno & Sparks, NV`, ABOUT_DESCRIPTION),
+          webPageSchema(`/about`, `About ${SITE_NAME} — Lawn Care Reno & Sparks, NV`, ABOUT_DESCRIPTION, {
+            pageType: "AboutPage",
+          }),
         ]}
       />
       <AboutHero />
