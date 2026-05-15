@@ -32,12 +32,12 @@ export function businessOpeningHoursSpecificationNode() {
   };
 }
 
-/** Business map pin as Schema.org GeoCoordinates (WGS84). */
+/** Business map pin as Schema.org GeoCoordinates (WGS84). Numbers match schema.org examples. */
 export function businessGeoCoordinates() {
   return {
     "@type": "GeoCoordinates" as const,
-    latitude: SITE_GEO.latitude,
-    longitude: SITE_GEO.longitude,
+    latitude: Number.parseFloat(SITE_GEO.latitude),
+    longitude: Number.parseFloat(SITE_GEO.longitude),
   };
 }
 
@@ -45,8 +45,8 @@ export function businessGeoCoordinates() {
 export function areaGeoCoordinates(latitude: string, longitude: string) {
   return {
     "@type": "GeoCoordinates" as const,
-    latitude,
-    longitude,
+    latitude: Number.parseFloat(latitude),
+    longitude: Number.parseFloat(longitude),
   };
 }
 export const SERVICE_PAGE_CATALOG_OFFERINGS = [
@@ -88,11 +88,11 @@ export function webPageSchema(path: string, name: string, description: string) {
 
 /** Home: WebPage + primary image for rich context */
 export function homeWebPageSchema() {
-  const url = SITE_URL;
+  const pageUrl = absoluteUrl("/");
   return {
     "@type": "WebPage",
-    "@id": `${url}#webpage`,
-    url,
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
     name: `${SITE_NAME} | Reno & Sparks, Nevada`,
     description: SITE_DEFAULT_DESCRIPTION,
     isPartOf: { "@id": WEBSITE_ID },
@@ -240,8 +240,9 @@ export function businessAreaServedForSchema() {
   ];
 }
 
-/** Global @graph: WebSite + Organization + LawnCare (LocalBusiness) for Google Search & Maps */
+/** Global @graph: WebSite + Organization + LocalBusiness (home/yard services) for Google Search & Maps */
 export function globalBusinessGraph() {
+  const siteRootUrl = absoluteUrl("/");
   const logoUrl = absoluteUrl(SITE_LOGO_PATH);
   const mapSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${SITE_NAME} Reno NV`)}`;
 
@@ -256,11 +257,19 @@ export function globalBusinessGraph() {
 
   const areaServed = businessAreaServedForSchema();
 
+  /** Organization: geo & hours live on Place + LocalBusiness (strict schema.org validators flag them on Organization). */
+  const organizationLocation = {
+    "@type": "Place" as const,
+    name: SITE_NAME,
+    address: postalAddress,
+    geo: businessGeoCoordinates(),
+  };
+
   return [
     {
       "@type": "WebSite",
       "@id": WEBSITE_ID,
-      url: SITE_URL,
+      url: siteRootUrl,
       name: SITE_NAME,
       description: SITE_DEFAULT_DESCRIPTION,
       inLanguage: "en-US",
@@ -279,7 +288,7 @@ export function globalBusinessGraph() {
       "@id": ORGANIZATION_ID,
       name: SITE_NAME,
       description: SITE_DEFAULT_DESCRIPTION,
-      url: SITE_URL,
+      url: siteRootUrl,
       logo: {
         "@type": "ImageObject",
         url: logoUrl,
@@ -288,9 +297,8 @@ export function globalBusinessGraph() {
       email: SITE_EMAIL,
       telephone: SITE_PHONE_E164,
       address: postalAddress,
-      geo: businessGeoCoordinates(),
+      location: organizationLocation,
       areaServed,
-      openingHoursSpecification: { "@id": OPENING_HOURS_SPEC_ID },
       sameAs: [...SITE_SAME_AS],
       contactPoint: [
         {
@@ -303,12 +311,12 @@ export function globalBusinessGraph() {
       ],
     },
     {
-      "@type": ["LawnCare", "LocalBusiness"],
+      "@type": ["HomeAndConstructionBusiness", "LocalBusiness"],
       "@id": BUSINESS_ID,
       parentOrganization: { "@id": ORGANIZATION_ID },
       name: SITE_NAME,
       description: SITE_DEFAULT_DESCRIPTION,
-      url: SITE_URL,
+      url: siteRootUrl,
       email: SITE_EMAIL,
       telephone: SITE_PHONE_E164,
       image: [logoUrl],
